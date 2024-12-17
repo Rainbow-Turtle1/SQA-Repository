@@ -1,0 +1,21 @@
+{
+    "name": "express-pug-sqlite-blog",
+    "version": "1.0.0",
+    "description": "A simple blog using Express, Pug, and SQLite",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js",
+      "dev": "nodemon app.js"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "pug": "^3.0.2",
+      "sqlite3": "^5.0.2",
+      "sequelize": "^6.6.5"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.12"
+    }
+  }
+  
+  

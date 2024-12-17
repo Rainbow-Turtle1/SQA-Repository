@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  p.post-meta By #{post.author} (Posted on #{post.created_at.toLocaleString()})
+  p.post-content= post.content
+  a(href=`/edit/${post.id}`) Edit Post
+

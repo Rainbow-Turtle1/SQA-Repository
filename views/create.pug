@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  form(action="/create", method="POST")
+    input(type="text", name="title", placeholder="Title", required)
+    input(type="text", name="author", placeholder="Author", required)
+    textarea(name="content", placeholder="Content", required)
+    button(type="submit") Create
+
