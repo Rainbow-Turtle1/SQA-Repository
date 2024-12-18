@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    title= title
+    link(rel="stylesheet", href="/css/styles.css")
+  body
+    header
+      h1 Blog with Express
+      nav.navbar
+        ul
+          li
+            a(href="/") Home
+          li
+            a(href="/create") Create Post
+          li
+            a(href="/stats") Stats
+    main
+      h1= title
+      block content
+
