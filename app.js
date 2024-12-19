@@ -1,10 +1,14 @@
-const express = require("express");
-const path = require("path");
-const { sequelize } = require("./models");
-const blogRoutes = require("./routes/blog").default.default;
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import { sequelize } from "./models";
+import blogRoutes from "./routes/blog";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000; //add env file later
 
 // View engine setup
 app.set("views", path.join(__dirname, "views"));

@@ -1,11 +1,11 @@
-const request = require("supertest");
-const express = require("express");
-const { sequelize, BlogPost } = require("../models");
-const blogRoutes = require("../routes/blog").default.default;
+import request from "supertest";
+import express, { urlencoded } from "express";
+import { sequelize } from "../models";
+import blogRoutes from "../routes/blog";
 
 const app = express();
 app.set("view engine", "pug");
-app.use(express.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 app.use("/", blogRoutes);
 
 beforeAll(async () => {
