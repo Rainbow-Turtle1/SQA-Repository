@@ -29,7 +29,6 @@ jobs:
         uses: sibiraj-s/action-eslint@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # Optional for annotations
-          ignore-path: .eslintignore
           ignore-patterns: |
             dist/
             lib/
