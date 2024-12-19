@@ -1,5 +1,5 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const sequelize = require("../config/database").default;
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/database';
 
 const BlogPost = sequelize.define(
   "BlogPost",
@@ -24,4 +24,4 @@ const BlogPost = sequelize.define(
   }
 );
 
-module.exports = { sequelize, BlogPost };
+export { sequelize, BlogPost };
