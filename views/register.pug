@@ -1,0 +1,28 @@
+doctype html
+html
+   head
+      title Register
+      link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+   body
+      .container
+         .row.justify-content-center
+            .col-md-6
+               h1.text-center Register
+               form(action='/register', method='POST')
+                  .form-group
+                     label(for='name') Name:
+                     input.form-control(type='text', name='name', id='name', required)
+                  .form-group
+                     label(for='email') Email:
+                     input.form-control(type='email', name='email', id='email', required)
+                  .form-group
+                     label(for='password') Password:
+                     input.form-control(type='password', name='password', id='password', required)
+                  .form-group
+                     label(for='confirmPassword') Confirm Password:
+                     input.form-control(type='password', name='confirmPassword', id='confirmPassword', required)
+                  .form-group
+                     button.btn.btn-primary.btn-block(type='submit') Register
+               .text-center
+                  p Have an account? 
+                     a(href='/login') Log in
