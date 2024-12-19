@@ -5,7 +5,7 @@ const blogRoutes = require('./routes/blog');
 const userRoutes = require('./routes/user');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
