@@ -1,6 +1,6 @@
 const request = require('supertest');
 const express = require('express');
-const { sequelize, BlogPost } = require('../models');
+const { sequelize } = require('../models');
 const blogRoutes = require('../routes/blog');
 
 const app = express();
@@ -8,17 +8,22 @@ app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));
 app.use('/', blogRoutes);
 
+// eslint-disable-next-line no-undef
 beforeAll(async () => {
     await sequelize.sync({ force: true });
 });
 
+// eslint-disable-next-line no-undef
 afterAll(async () => {
     await sequelize.close();
 });
 
+// eslint-disable-next-line no-undef
 describe('Blog Routes', () => {
+    // eslint-disable-next-line no-undef
     test('GET HOME PAGE / Expect CODE 200', async () => {
         const response = await request(app).get('/')
+        // eslint-disable-next-line no-undef
         expect(response.statusCode).toBe(200);
     })
 
