@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const { BlogPost } = require('../models');
+import { Router } from 'express';
+const router = Router();
+import { BlogPost } from '../models';
 
 router.get('/', async (req, res) => {
   const posts = await BlogPost.findAll();
@@ -67,5 +67,5 @@ router.get('/stats', async (req, res) => {
   res.render('stats', { title: 'Post Statistics', ...stats });
 });
 
-module.exports = router;
+export default router;
 
