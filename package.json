@@ -8,8 +8,9 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
-},
+  },
   "dependencies": {
+    "dotenv": "16.4.7",
     "express": "^4.17.1",
     "pug": "^3.0.2",
     "sequelize": "^6.6.5",
