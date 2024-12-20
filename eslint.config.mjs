@@ -1,16 +1,18 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 
-/** @type {import('eslint').Linter.FlatConfig[]} */
+/** @type {import('eslint').Linter.Config[]} */
 export default [
   {
     languageOptions: {
       globals: {
-        ...globals.node, 
+        ...globals.browser, 
+        ...globals.jest,  
       },
-      ecmaVersion: 2021,
-      sourceType: "module", 
-    },
+      sourceType: "module"
+    }
   },
-  pluginJs.configs.recommended,
+  pluginJs.configs.recommended
 ];
+
+

@@ -10,28 +10,13 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # 2. Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      # 3. Install dependencies
-      - name: Install dependencies
-        run: npm ci
-
-      # 4. Run ESLint using sibiraj-s/action-eslint
-      - name: Run ESLint
-        uses: sibiraj-s/action-eslint@v3
+          node-version: '20.x'
+      - run: npm install
+      - uses: sibiraj-s/action-eslint@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }} # Optional for annotations
           ignore-patterns: |
             dist/
             lib/
-          eslint-args: '--ignore-path=.gitignore --quiet'
-          extensions: 'js,jsx,ts,tsx'
-          annotations: true

@@ -1,7 +1,7 @@
-const request = require('supertest');
-const express = require('express');
-const { sequelize } = require('../models');
-const blogRoutes = require('../routes/blog');
+import request from 'supertest';
+import { sequelize } from '../models';
+import express from 'express';
+import blogRoutes from '../routes/blog.js';
 
 const app = express();
 app.set('view engine', 'pug');
@@ -18,31 +18,11 @@ afterAll(async () => {
     await sequelize.close();
 });
 
-// eslint-disable-next-line no-undef
-describe('Blog Routes', () => {
-    // eslint-disable-next-line no-undef
-    test('GET HOME PAGE / Expect CODE 200', async () => {
-        const response = await request(app).get('/')
-        // eslint-disable-next-line no-undef
-        expect(response.statusCode).toBe(200);
-    })
+describe('GET /', () => {
+    it('should return 200 OK', async () => {
+        const response = await request(app)
+            .get('/').timeout({ deadline: 2000 }); 
 
-    // test('POST BLOG /create', async ()=>{
-    //     const newPost = {
-    //         title: 'Test Post',
-    //         content: 'This is a test',
-    //         author: 'The Tester'
-    //     }
-
-    //     const response = await request(app)
-    //         .post('/create')
-    //         .send(newPost)
-    //         // .expect(200)
-
-    //     const foundPost = await BlogPost.findOne({ where: {title: newPost.title}});
-    //     expect(post).not.toBeNull();
-    //     expect(post.content).toBe(newPost.content)
-    // })
-
-
-})
+        expect(response.status).toBe(200);
+    });
+});
