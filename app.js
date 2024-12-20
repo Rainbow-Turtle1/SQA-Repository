@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000; //add env file later
+const port = 3000;
 
 // View engine setup
 app.set("views", path.join(__dirname, "views"));
