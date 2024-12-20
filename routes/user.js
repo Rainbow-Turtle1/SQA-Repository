@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
+// import { User } from '../models/user.js';
 
-router.get('/register', (req, res) => {
-  res.render('register', { title: 'Register' });
+router.get('/register', (req, res) => { 
+  res.render("register", { title: "Register" });
 });
 
-module.exports = router;
+
+export default router;
