@@ -1,8 +1,8 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { sequelize } from "./models";
-import blogRoutes from "./routes/blog";
+import { sequelize } from "./models/index.js";
+import blogRoutes from "./routes/blog.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,3 +32,5 @@ sequelize.sync().then(() => {
     console.log(`Server is running on http://localhost:${port}`);
   });
 });
+
+export default app;
