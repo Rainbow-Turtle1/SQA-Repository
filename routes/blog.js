@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { BlogPost } from '../models';
+import { BlogPost } from '../models/index.js';
 
 router.get('/', async (req, res) => {
   const posts = await BlogPost.findAll();

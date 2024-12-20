@@ -7,11 +7,11 @@ const app = express();
 app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));
 app.use('/', blogRoutes);
-
+ 
 beforeAll(async () => {
     await sequelize.sync({ force: true });
 });
-
+ 
 afterAll(async () => {
     await sequelize.close();
 });
