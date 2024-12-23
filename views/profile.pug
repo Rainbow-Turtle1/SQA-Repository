@@ -1,3 +1,19 @@
 extends layout 
 
 block content
+	// could add a profile banner here
+	h2 Profile Picture
+	img(class="profile-picture image-container")(src='resources/profile-icon.jpg', alt='Profile Picture')
+	button(class="image-container image-container-buttons") Change Image
+	button(class="image-container image-container-buttons") Remove Image
+	div.name-container
+		h2 Details
+		button(class="name-button") ✐ Edit
+	div.details-container
+		div Name: John Smith
+		div Email: j.smith@email.com
+	div.change-credentials
+		button.change-credentials-buttons Change Name
+		button.change-credentials-buttons Change Email
+		button.change-credentials-buttons Change Password
+	button(class="danger delete-account") Delete Account

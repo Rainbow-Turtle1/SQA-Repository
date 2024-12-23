@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import { sequelize } from "./models/index.js";
 import blogRoutes from "./routes/blog.js";
 import userRoutes from "./routes/user.js";
+import profileRoutes from "./routes/profile.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", blogRoutes);
 app.use("/", userRoutes);
+app.use("/", profileRoutes);
 
 // Sync database and start server
 sequelize.sync().then(() => {
