@@ -47,6 +47,7 @@ router.post("/login", async (req, res) => {
 
     if (!email || !password) {
       res.send(createRedirectResponse("Sorry, but all fields are required to login! Redirecting to the login page in 3 seconds...", "/login"));
+      return;
     }
 
     // Find user by email
