@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    p Are you sure you want to delete your account?
+    p This action cannot be undone.
+    p If you're sure, type your password below and click the button.
+    form(action='/profile/delete-account', method='POST')
+    .form-group
+        label(for='password') Password
+        input#password.form-control(type='password', name='password', required)
+    button.btn.btn-danger.btn-block(type='submit', class="danger") Delete Account
