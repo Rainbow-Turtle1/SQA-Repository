@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 20px;
 }
-  
+
 header {
   background: #f4f4f4;
   padding: 1rem;
@@ -30,7 +30,8 @@ form {
   margin-bottom: 1rem;
 }
 
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 0.5rem;
   margin-bottom: 1rem;
@@ -45,7 +46,7 @@ button {
 }
 
 button:hover {
-  background: #555555
+  background: #555555;
 }
 
 button.danger {
@@ -77,22 +78,13 @@ button.danger:hover {
   border-radius: 20px;
 }
 
-.name-button {
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.name-container {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-}
-
 .details-container {
   margin: 0;
   padding-bottom: 20px;
+}
+
+.details {
+  font-size: 16px;
 }
 
 .change-credentials {
@@ -105,14 +97,12 @@ button.danger:hover {
 
 .change-credentials-buttons {
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .delete-account {
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 }
-  
-  
