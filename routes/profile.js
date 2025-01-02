@@ -30,34 +30,42 @@ router.post("/profile/change-password", (req, res) => {
     const { oldPassword, newPassword, confirmPassword } = req.body;
 
     if (!oldPassword || !newPassword || !confirmPassword) {
-      res.send(
-        createRedirectResponse(
-          "You must enter all fields.",
-          "/profile/change-password"
-        )
-      );
+      res
+        .status(400)
+        .send(
+          createRedirectResponse(
+            "You must enter all fields.",
+            "/profile/change-password"
+          )
+        );
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      res.send(
-        createRedirectResponse(
-          "The new passwords you have entered do not match.",
-          "/profile/change-password"
-        )
-      );
+      res
+        .status(400)
+        .send(
+          createRedirectResponse(
+            "The new passwords you have entered do not match.",
+            "/profile/change-password"
+          )
+        );
       return;
     }
 
     if (oldPassword === newPassword) {
-      res.send(
-        createRedirectResponse(
-          "Your new password must be different from your old password.",
-          "/profile/change-password"
-        )
-      );
+      res
+        .status(400)
+        .send(
+          createRedirectResponse(
+            "Your new password must be different from your old password.",
+            "/profile/change-password"
+          )
+        );
       return;
     }
+
+    res.status(200).send("Password changed successfully.");
 
     // need to add the functionality to:
     // > make sure that the user is authenticated
@@ -65,7 +73,7 @@ router.post("/profile/change-password", (req, res) => {
     // > update the user's password in the database
   } catch (error) {
     console.error("Error changing password:", error);
-    res.status(500).send("Error changing password.");
+    res.status(400).send("Error changing password.");
   }
 });
 
