@@ -10,6 +10,7 @@
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
   },
   "dependencies": {
+    "bcryptjs": "2.4.3",
     "dotenv": "16.4.7",
     "express": "^4.17.1",
     "nodemon": "^3.1.9",

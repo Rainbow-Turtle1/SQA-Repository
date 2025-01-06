@@ -1,4 +1,5 @@
 import { Router } from "express";
+import bcrypt from "bcryptjs";
 const router = Router();
 import { User } from "../models/user.js";
 import { createRedirectResponse } from "./userUtil.js";
@@ -28,9 +29,12 @@ router.post("/register", async (req, res) => {
       return;
     }
 
-    await User.create({ name, email, password });
+    const hash = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password: hash });
     res.redirect("/");
+
   } catch (error) {
+
     console.error("Error registering new user:", error);
     res.status(500).send("Error registering new user.");
   }
@@ -58,7 +62,8 @@ router.post("/login", async (req, res) => {
     }
 
     // Check password
-    if (user.password !== password) {
+    const doesPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!doesPasswordMatch) {
       res.send(createRedirectResponse("That was the wrong password, sorry! Redirecting to the login page in 3 seconds...", "/login"));
       return;
     }
