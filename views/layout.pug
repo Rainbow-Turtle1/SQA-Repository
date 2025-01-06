@@ -4,16 +4,22 @@ html(lang="en")
     title= title
     link(rel="stylesheet", href="/css/styles.css")
   body
-    header
-      h1 Blog with Express
-      nav.navbar
+    header.navbar
+      a(href="/")
+        h1.title Blog with Express
+      nav
         ul
           li
-            a(href="/") Home
+            a.navbar-button(href="/create") + Create Post
           li
-            a(href="/create") Create Post
-          li
-            a(href="/stats") Stats
+            a.navbar-button(href="/stats") Post Stats
+      .navbar-account
+        .navbar-account-button
+          a.login-button(href="/login") Login
+          div /
+          a.register-button(href="/register") Register
+        a(href="/profile")
+          img(class="profile-icon", src='resources/profile-icon.jpg', alt='Profile Picture')
     main
       h1= title
       block content
