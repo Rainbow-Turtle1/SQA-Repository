@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -6,11 +9,15 @@ import blogRoutes from "./routes/blog.js";
 import userRoutes from "./routes/user.js";
 import profileRoutes from "./routes/profile.js"
 
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+// const port = 3000;
 
 // View engine setup
 app.set("views", path.join(__dirname, "views"));
