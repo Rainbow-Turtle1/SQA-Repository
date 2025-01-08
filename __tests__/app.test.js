@@ -31,7 +31,7 @@ describe("GET /", () => {
     expect(response.text).toContain("Login");
     expect(response.text).toContain("Register");
     expect(response.text).toContain(
-      '<img class="profile-icon" src="resources/profile-icon.jpg" alt="Profile Picture">'
+      '<img class="profile-icon" src="resources/profile-images/grey-profile-icon.png" alt="Profile Picture">'
     );
   });
 });
