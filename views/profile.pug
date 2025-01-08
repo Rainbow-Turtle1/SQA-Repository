@@ -9,7 +9,7 @@ block content
 				img.profile-picture(src=profilePicture, alt='Profile Picture')
 		form(action='/profile', method='POST')
 			input(type='hidden', name='action', value='savePicture')
-			button Save
+			button Save Profile Picture
 	div.details-container
 	h2 Details
 		p.details Name: #{user.user.name}
