@@ -2,10 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { BlogPost } from "../models/index.js";
 
-import {
-  getAccountProfilePicture,
-  setAccountProfilePicture,
-} from "./shared-data.js";
+import { getAccountProfilePicture } from "./shared-data.js";
 
 let accountProfilePicture;
 
