@@ -3,13 +3,18 @@ extends layout
 block content
 	h2 Profile Picture
 	.image-container
-		form(action='/profile', method='POST')
-			input(type='hidden', name='action', value='changePicture')
-			button.profile-picture-container
+		.image-selector
+			form(action='/profile', method='POST')
+				input(type='hidden', name='action', value='prevPicture')
+				button <
+			.profile-picture-container
 				img.profile-picture(src=profilePicture, alt='Profile Picture')
-		form(action='/profile', method='POST')
-			input(type='hidden', name='action', value='savePicture')
-			button Save Profile Picture
+				form(action='/profile', method='POST')
+					input(type='hidden', name='action', value='savePicture')
+					button.save-icon 💾
+			form(action='/profile', method='POST')
+				input(type='hidden', name='action', value='nextPicture')
+				button >
 	div.details-container
 	h2 Details
 		p.details Name: #{user.user.name}
