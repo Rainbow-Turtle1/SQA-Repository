@@ -60,7 +60,13 @@ button.danger:hover {
 .image-container {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
+  gap: 10px;
+}
+
+.image-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .profile-picture {
@@ -75,6 +81,28 @@ button.danger:hover {
 .profile-picture-container,
 .profile-picture-container:hover {
   background: white;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-items: center;
+  z-index: 1;
+}
+
+.profile-picture-container > * {
+  grid-column: 1 / 1;
+  grid-row: 1 / 1;
+}
+
+.save-icon {
+  z-index: 2;
+  position: relative;
+  left: 75px;
+  top: 75px;
+  border: #000000;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 25px;
+  background-color: #aaaaaa;
+  font-size: 20px;
 }
 
 .profile-icon {

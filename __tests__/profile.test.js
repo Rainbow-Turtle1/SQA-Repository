@@ -32,10 +32,10 @@ describe("GET Profile Routes", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain("Change Password");
   });
-  test("GET /profile/change-password should render the change password page", async () => {
-    const response = await request(app).get("/profile/change-password");
+  test("GET /profile/change-password should render the delete account page", async () => {
+    const response = await request(app).get("/profile/delete-account");
     expect(response.status).toBe(200);
-    expect(response.text).toContain("Change Password");
+    expect(response.text).toContain("Delete Account");
   });
 });
 
@@ -74,6 +74,21 @@ describe("POST /profile/change-password", () => {
         oldPassword: "password123",
         newPassword: "newpassword123",
         confirmPassword: "differentpassword123",
+      });
+
+    expect(response.status).toBe(400);
+  });
+
+  it("should return 400 if a malformed response is sent", async () => {
+    const response = await request(app)
+      .post("/profile/change-password")
+      .type("form")
+      .send({
+        passwordJson: {
+          oldPassword: "password123",
+          newPassword: "newpassword123",
+          confirmPassword: "differentpassword123",
+        },
       });
 
     expect(response.status).toBe(400);

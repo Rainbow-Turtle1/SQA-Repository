@@ -111,10 +111,21 @@ router.post("/profile/edit", (req, res) => {
 router.post("/profile", (req, res) => {
   const { action } = req.body;
 
-  if (action === "changePicture") {
+  if (action === "nextPicture") {
     currentProfilePicture < profilePicturePaths.length - 1
       ? currentProfilePicture++
       : (currentProfilePicture = 0);
+
+    res.render("profile", {
+      title: "Profile",
+      user: { user },
+      profilePicture: profilePicturePaths[currentProfilePicture],
+      profileIcon: profilePicturePaths[accountProfilePicture],
+    });
+  } else if (action === "prevPicture") {
+    currentProfilePicture > 0
+      ? currentProfilePicture--
+      : (currentProfilePicture = profilePicturePaths.length - 1);
 
     res.render("profile", {
       title: "Profile",
