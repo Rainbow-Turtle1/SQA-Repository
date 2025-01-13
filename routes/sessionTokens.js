@@ -12,7 +12,7 @@ function GenerateSessionToken(id){
         id, 
         date: getCurrentDate(),
     }
-    encryptedToken=tokenEncrypt(newToken)
+    let encryptedToken = tokenEncrypt(newToken)
     return encryptedToken
 }
 
@@ -24,7 +24,7 @@ function getCurrentDate(){
 }
 
 function tokenEncrypt(token){
-    encrypted=token
+    let encrypted = token
     return encrypted
 }
 
