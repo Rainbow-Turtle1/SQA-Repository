@@ -43,4 +43,4 @@ function tokenIsValid(uuid){
     return false
 }
 
-export{NewSessionToken,GenerateSessionToken}
+export{NewSessionToken,GenerateSessionToken,tokenIsValid}
