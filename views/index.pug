@@ -1,8 +1,18 @@
 extends layout
 
 block content
+  // Search and Sort Form
+  form(action="/" method="get")
+    input(type="text" name="q" placeholder="Search posts..." value=(q || ''))
+    select(name="sort")
+      option(value="created_at:desc" selected=(sort === 'created_at:desc')) Newest First
+      option(value="created_at:asc" selected=(sort === 'created_at:asc')) Oldest First
+      option(value="title:asc" selected=(sort === 'title:asc')) Title A-Z
+      option(value="title:desc" selected=(sort === 'title:desc')) Title Z-A
+    button(type="submit") Apply
+
+  // List of Posts
   ul
     each post in posts
       li
         a(href=`/post/${post.id}`) #{post.title} by #{post.author} (#{post.created_at.toLocaleDateString()})
-
