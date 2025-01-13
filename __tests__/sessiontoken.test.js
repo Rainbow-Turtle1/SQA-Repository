@@ -1,4 +1,4 @@
-import { NewSessionToken } from 'routes/sessionTokens.js';
+import { NewSessionToken } from 'SQA-Repository\routes\sessionTokens.js';
 
 beforeEach(() => {
     global.sessionStorage = {
