@@ -3,6 +3,7 @@ const router = Router();
 import { BlogPost } from "../models/index.js";
 
 import { getAccountProfilePicture } from "./shared-data.js";
+import {Op, Sequelize} from "sequelize";
 
 let accountProfilePicture;
 
@@ -20,15 +21,42 @@ const profilePicturePaths = [
 ];
 
 router.get("/", async (req, res) => {
-  const posts = await BlogPost.findAll();
+  const { q, sort } = req.query;
+  console.log("Search query:", q);
+  console.log("Sort option:", sort);
+
+  let query = {};
+  if (q) {
+    query = {
+      [Op.or]: [
+        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${q.toLowerCase()}%`),
+        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('content')), 'LIKE', `%${q.toLowerCase()}%`)
+      ]
+    };
+  }
+  console.log("Query object:", query);
+
+  let sortOption = [];
+  if (sort) {
+    const [key, order] = sort.split(':');
+    sortOption.push([key, order.toUpperCase()]);
+  } else {
+    sortOption.push(['created_at', 'DESC']); // Default to newest first
+  }
+  console.log("Sort option array:", sortOption);
+
+  const posts = await BlogPost.findAll({ where: query, order: sortOption });
+  console.log("Sorted posts:", posts.map(post => post.title)); // Log the titles to check order
+
   accountProfilePicture = getAccountProfilePicture();
   res.render("index", {
     title: "Blog Posts",
     posts,
+    q,
+    sort,
+    noPostsFound: posts.length === 0,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
-
-  console.log("acc pfp:", accountProfilePicture);
 });
 
 router.get("/create", (req, res) => {
