@@ -1,7 +1,7 @@
-function NewSessionToken(){
+function NewSessionToken(id){
     let token = sessionStorage.getItem('sessionToken')
     if (!token){
-        token = GenerateSessionToken()
+        token = GenerateSessionToken(id)
         sessionStorage.setItem('sessionToken', token)
     }
     return token
@@ -28,7 +28,7 @@ function tokenEncrypt(token){
     return encrypted
 }
 
-function checkIsTokenValid(uuid){
+function tokenIsValid(uuid){
     const storedToken = sessionStorage.getItem('sessionToken')
     if (!storedToken) {
         console.error('No session token found')
@@ -43,4 +43,4 @@ function checkIsTokenValid(uuid){
     return false
 }
 
-export{NewSessionToken,GenerateToken}
+export{NewSessionToken,GenerateSessionToken}
