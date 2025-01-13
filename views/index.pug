@@ -12,7 +12,10 @@ block content
     button(type="submit") Apply
 
   // List of Posts
-  ul
-    each post in posts
-      li
-        a(href=`/post/${post.id}`) #{post.title} by #{post.author} (#{post.created_at.toLocaleDateString()})
+  if noPostsFound
+    p Sorry, no posts found.
+  else
+    ul
+      each post in posts
+        li
+          a(href=`/post/${post.id}`) #{post.title} by #{post.author} (#{post.created_at.toLocaleDateString()})
