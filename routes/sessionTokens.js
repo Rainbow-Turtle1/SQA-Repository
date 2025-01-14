@@ -2,7 +2,7 @@ function NewSessionToken(id){
     let token = sessionStorage.getItem('sessionToken')
     if (!token){
         token = GenerateSessionToken(id)
-        sessionStorage.setItem('sessionToken', token)
+        sessionStorage.setItem('sessionToken', JSON.stringify(token))
     }
     return token
 }
