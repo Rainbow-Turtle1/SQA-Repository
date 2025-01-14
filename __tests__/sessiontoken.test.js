@@ -1,4 +1,5 @@
 import 'jest-localstorage-mock';
+import { jest } from '@jest/globals';
 import { NewSessionToken } from '../routes/sessionTokens.js';
 
 beforeEach(() => {
