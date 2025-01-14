@@ -3,7 +3,7 @@ import { NewSessionToken } from '../routes/sessionTokens.js';
 
 beforeEach(() => {
   globalThis.sessionStorage = {
-    getItem: jest.fn(),
+    getItem: jest.fn().mockReturnValue(null),
     setItem: jest.fn(),
   };
 });
