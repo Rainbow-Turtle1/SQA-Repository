@@ -143,6 +143,8 @@ router.post("/profile", (req, res) => {
       profilePicture: profilePicturePaths[accountProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
+  } else {
+    res.status(400).send("Invalid action.");
   }
 });
 
