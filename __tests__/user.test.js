@@ -9,14 +9,16 @@ app.set("view engine", "pug");
 app.use(express.urlencoded({ extended: true }));
 app.use("/", UserRoutes);
 
+// Database lifecycle hooks
 beforeAll(async () => {
-  await sequelize.sync({ force: true });
+  await sequelize.sync({ force: true }); // Reset database
 });
 
 afterAll(async () => {
-  await sequelize.close();
+  await sequelize.close(); // Clean up connections
 });
 
+// Mock Request and Response objects
 function mockRequest(body = {}) {
   return {
     body,
@@ -63,7 +65,8 @@ describe("GET /login", () => {
   });
 });
 
-// POST Register Routes
+// POST Routes
+
 describe("POST /register happy cases", () => {
   it("should register a new user if inputs are valid", async () => {
     const req = mockRequest({
@@ -128,7 +131,6 @@ describe("POST /register error cases", () => {
   });
 });
 
-// POST Login Routes
 describe("POST /login happy paths", () => {
   it("should log in a user if credentials are valid", async () => {
     const password = await bcrypt.hash("securepassword", 10);
@@ -225,3 +227,5 @@ describe("POST /login error cases", () => {
     spy.mockRestore();
   });
 });
+
+
