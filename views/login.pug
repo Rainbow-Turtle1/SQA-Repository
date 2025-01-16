@@ -10,8 +10,8 @@ html
                h2.text-center Login
                form(action='/login', method='POST')
                   .form-group
-                     label(for='username') Email
-                     input#email.form-control(type='text', name='email', required)
+                     label(for='email') Email:
+                     input.form-control(type='email', name='email', id='email', required)
                   .form-group
                      label(for='password') Password
                      input#password.form-control(type='password', name='password', required)
