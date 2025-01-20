@@ -102,9 +102,10 @@ router.post("/profile/edit", (req, res) => {
       );
       return;
     }
+    res.status(400).send("Error editing user details. sgds");
   } catch (error) {
     console.error("Error editing user details:", error);
-    res.status(500).send("Error editing user details.");
+    res.status(400).send("Error editing user details.");
   }
 });
 
