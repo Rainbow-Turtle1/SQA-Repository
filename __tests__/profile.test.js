@@ -36,7 +36,7 @@ describe("GET Profile Routes", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain("Change Password");
   });
-  test("GET /profile/change-password should render the delete account page", async () => {
+  test("GET /profile/delete-account should render the delete account page", async () => {
     const response = await request(app).get("/profile/delete-account");
     expect(response.status).toBe(200);
     expect(response.text).toContain("Delete Account");
@@ -98,6 +98,15 @@ describe("POST /profile/change-password", () => {
     expect(response.status).toBe(400);
   });
 
+  it("should return 400 if the response is empty", async () => {
+    const response = await request(app)
+      .post("/profile/change-password")
+      .type("form")
+      .send({});
+
+    expect(response.status).toBe(400);
+  });
+
   it("should return 200 if password is changed successfully", async () => {
     const response = await request(app)
       .post("/profile/change-password")
@@ -154,3 +163,18 @@ describe("POST /profile and test profile picture functionality", () => {
     expect(updatedProfilePicture).toBe(currentProfilePicture - 1);
   });
 });
+
+describe("POST /profile/edit", () => {
+  it("should return 400 if the user incorrectly enters their name & email", async () => {
+    const response = await request(app)
+      .post("/profile/edit")
+      .type("form")
+      .send({ name: "John Smith" });
+
+    expect(response.status).toBe(400);
+  });
+});
+
+// 90-91 is password changing
+// 105-108 is editing the profile
+// 148 is changing the profile picture
