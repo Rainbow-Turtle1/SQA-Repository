@@ -22,8 +22,6 @@ const profilePicturePaths = [
 
 router.get("/", async (req, res) => {
   const { q, sort } = req.query;
-  console.log("Search query:", q);
-  console.log("Sort option:", sort);
 
   let query = {};
   if (q) {
@@ -34,7 +32,6 @@ router.get("/", async (req, res) => {
       ]
     };
   }
-  console.log("Query object:", query);
 
   let sortOption = [];
   if (sort) {
@@ -43,10 +40,8 @@ router.get("/", async (req, res) => {
   } else {
     sortOption.push(['created_at', 'DESC']); // Default to newest first
   }
-  console.log("Sort option array:", sortOption);
 
   const posts = await BlogPost.findAll({ where: query, order: sortOption });
-  console.log("Sorted posts:", posts.map(post => post.title)); // Log the titles to check order
 
   accountProfilePicture = getAccountProfilePicture();
   res.render("index", {
