@@ -10,6 +10,7 @@ import { sequelize } from "./models/index.js";
 import blogRoutes from "./routes/blog.js";
 import userRoutes from "./routes/user.js";
 import profileRoutes from "./routes/profile.js";
+import favicon from "serve-favicon";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +21,9 @@ const port = process?.env?.PORT || 3000;
 // View engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+
+// Sets a favicon for the website
+app.use(favicon(path.join(__dirname, "public", "resources", "favicon.ico")));
 
 // Middleware
 // Parse URL-encoded bodies (as sent by HTML forms)
