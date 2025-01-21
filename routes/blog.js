@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import { BlogPost } from "../models/index.js";
-
+import {Op, Sequelize} from "sequelize";
 import {
   getAccountProfilePicture,
   profilePicturePaths,
@@ -10,11 +10,35 @@ import {
 let accountProfilePicture;
 
 router.get("/", async (req, res) => {
-  const posts = await BlogPost.findAll();
+  const { q, sort } = req.query;
+
+  let query = {};
+  if (q) {
+    query = {
+      [Op.or]: [
+        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${q.toLowerCase()}%`),
+        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('content')), 'LIKE', `%${q.toLowerCase()}%`)
+      ]
+    };
+  }
+
+  let sortOption = [];
+  if (sort) {
+    const [key, order] = sort.split(':');
+    sortOption.push([key, order.toUpperCase()]);
+  } else {
+    sortOption.push(['created_at', 'DESC']); // Default to newest first
+  }
+
+  const posts = await BlogPost.findAll({ where: query, order: sortOption });
+
   accountProfilePicture = getAccountProfilePicture();
   res.render("index", {
     title: "Blog Posts",
     posts,
+    q,
+    sort,
+    noPostsFound: posts.length === 0,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
