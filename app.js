@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 import { sequelize } from "./models/index.js";
 import blogRoutes from "./routes/blog.js";
 import userRoutes from "./routes/user.js";
-import profileRoutes from "./routes/profile.js"
+import profileRoutes from "./routes/profile.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +34,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", blogRoutes);
 app.use("/", userRoutes);
 app.use("/", profileRoutes);
+app.use((req, res) => {
+  res.status(404).render("404", { title: "404 - Page Not Found" });
+});
 
 // Sync database and start server
 sequelize.sync().then(() => {

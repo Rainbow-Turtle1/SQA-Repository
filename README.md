@@ -2,7 +2,6 @@
 
 
 ## Feature Implementation
-
 | Feature  | Owner |
 | ------------- |:-------------:|
 | Blog Post Management: Implement features to search or sort blog posts effectively      | Nathan Voong     |
@@ -11,14 +10,31 @@
 | User Authentication: Enable user registration and login functionality   | Isabella Sulisufi    |
 
 ## Testing
-### TDD/BDD
+### Behaviour Driven Development
+We decided not to follow a TDD approach because we were still in the process of defining the application's scope and determining which features to prioritise. Without a clear roadmap of all the functionalities, writing precise tests before implementation felt impractical.
+
+Instead, we adopted BDD, which allowed us to write tests based on how the application should behave from a user's perspective. This approach provided us the flexibility to iterate on features while still ensuring that the core functionalities met our expectations.
+
+Our tests are structured to validate the application's behavior, as seen in the example below:  
+
+```javascript
+describe("GET /", () => {
+  it("should ..test scenario", async () => {
+  }));
+```
+
+With this format, we validate both the HTTP response status and the presence of key elements on the page, ensuring that the user experience aligns with our expectations. By using BDD, we were able to remain adaptable while still maintaining confidence in our application's functionality.
+
 
 ### Evidence of running tests
 ### Evidence of achieveing the coverage report
 ### How edge cases and error conditions were tested
 
 ## Security Enhancements
-### Password Hashing
+### Input Validation
+### CSRF Protection
+### Safeguards against XSS and SQL injection
+
 ### Password Hashing
 We decided not to encrypt passwords as it relies on an encryption key to decrypt the data back into its original form. Even if we store this key securely in environment variables, there's still a risk: if someone gains access to the key, they could decrypt and expose all stored passwords.
 
@@ -53,4 +69,13 @@ By using hashing with salting, we've significantly enhanced our password securit
 ## CI/CD and Git Practices
 
 ### GitHub Actions Used
+#### Linting Code
+To maintain consistent code standards and ensure our codebase remains clean and tidy, we implemented a GitHub Action specifically for linting. For this, we used ESLint along with a custom configuration file tailored to our project requirements.
+
+The linting action is triggered automatically on both pull requests and direct pushes to the master branch, helping to catch issues early and streamline the code review process.
+We opted for ESLint due to its flexibility and wide adoption within the JavaScript ecosystem.
+
+#### Testing
+We streamlined the CI process by automating functionality tests. This workflow triggers whenever changes are pushed or when pull requests are created. This provides rapid feedback on code changes, allowing us to catch errors early and fix them before they reach production. This in turn reduces manual effort and human error, as every change is thoroughly tested without requiring developer intervention. It also ensures consistent testing environments and accelerates the development workflow by integrating caching mechanisms for dependencies to improve efficiency. 
+
 ### How we colllaborated

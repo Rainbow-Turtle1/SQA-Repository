@@ -13,6 +13,7 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
+
     if (!name || !email || !password) {
       res.send(
         createRedirectResponse(

@@ -5,23 +5,11 @@ import { createRedirectResponse } from "./userUtil.js";
 import {
   getAccountProfilePicture,
   setAccountProfilePicture,
+  profilePicturePaths,
 } from "./shared-data.js";
 
 let accountProfilePicture = getAccountProfilePicture();
 let currentProfilePicture = 0;
-
-const profilePicturePaths = [
-  "resources/profile-images/grey-profile-icon.png",
-  "resources/profile-images/red-profile-icon.png",
-  "resources/profile-images/green-profile-icon.png",
-  "resources/profile-images/blue-profile-icon.png",
-  "resources/profile-images/orange-profile-icon.png",
-  "resources/profile-images/yellow-profile-icon.png",
-  "resources/profile-images/turquoise-profile-icon.png",
-  "resources/profile-images/purple-profile-icon.png",
-  "resources/profile-images/pink-profile-icon.png",
-  "resources/profile-images/black-profile-icon.png",
-];
 
 const user = {
   name: "John Smith",
@@ -114,19 +102,31 @@ router.post("/profile/edit", (req, res) => {
       );
       return;
     }
+    res.status(400).send("Error editing user details. sgds");
   } catch (error) {
     console.error("Error editing user details:", error);
-    res.status(500).send("Error editing user details.");
+    res.status(400).send("Error editing user details.");
   }
 });
 
 router.post("/profile", (req, res) => {
   const { action } = req.body;
 
-  if (action === "changePicture") {
+  if (action === "nextPicture") {
     currentProfilePicture < profilePicturePaths.length - 1
       ? currentProfilePicture++
       : (currentProfilePicture = 0);
+
+    res.render("profile", {
+      title: "Profile",
+      user: { user },
+      profilePicture: profilePicturePaths[currentProfilePicture],
+      profileIcon: profilePicturePaths[accountProfilePicture],
+    });
+  } else if (action === "prevPicture") {
+    currentProfilePicture > 0
+      ? currentProfilePicture--
+      : (currentProfilePicture = profilePicturePaths.length - 1);
 
     res.render("profile", {
       title: "Profile",
@@ -144,6 +144,8 @@ router.post("/profile", (req, res) => {
       profilePicture: profilePicturePaths[accountProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
+  } else {
+    res.status(400).send("Invalid action.");
   }
 });
 

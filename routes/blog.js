@@ -1,24 +1,13 @@
 import { Router } from "express";
 const router = Router();
 import { BlogPost } from "../models/index.js";
-
-import { getAccountProfilePicture } from "./shared-data.js";
 import {Op, Sequelize} from "sequelize";
+import {
+  getAccountProfilePicture,
+  profilePicturePaths,
+} from "./shared-data.js";
 
 let accountProfilePicture;
-
-const profilePicturePaths = [
-  "resources/profile-images/grey-profile-icon.png",
-  "resources/profile-images/red-profile-icon.png",
-  "resources/profile-images/green-profile-icon.png",
-  "resources/profile-images/blue-profile-icon.png",
-  "resources/profile-images/orange-profile-icon.png",
-  "resources/profile-images/yellow-profile-icon.png",
-  "resources/profile-images/turquoise-profile-icon.png",
-  "resources/profile-images/purple-profile-icon.png",
-  "resources/profile-images/pink-profile-icon.png",
-  "resources/profile-images/black-profile-icon.png",
-];
 
 router.get("/", async (req, res) => {
   const { q, sort } = req.query;

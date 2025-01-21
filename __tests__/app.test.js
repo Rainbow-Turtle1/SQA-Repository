@@ -35,6 +35,12 @@ describe("GET /", () => {
       '<img class="profile-icon" src="resources/profile-images/grey-profile-icon.png" alt="Profile Picture">'
     );
   });
+  it("should return the 404 page", async () => {
+    const response = await request(app).get("/undefined-route");
+
+    expect(response.status).toBe(404);
+    expect(response.text).toContain("Error");
+  });
 });
 
 describe('Blog Routes', () => {
