@@ -29,15 +29,25 @@ router.get("/profile", (req, res) => {
 });
 
 router.get("/profile/edit", (req, res) => {
-  res.render("user-profile/edit-details", { title: "Edit Profile", user: { user } });
+  res.render("user-profile/edit-details", {
+    title: "Edit Profile",
+    user: { user },
+  });
 });
 
 router.get("/profile/change-password", (req, res) => {
-  res.render("user-profile/change-password", { title: "Change Password", user: { user } });
+  res.render("user-profile/change-password", {
+    title: "Change Password",
+    user: { user },
+  });
 });
 
 router.get("/profile/delete-account", (req, res) => {
-  res.render("user-profile/delete-account", { title: "Delete Account", user: { user } });
+  res.render("user-profile/delete-account", {
+    title: "Delete Account",
+    user: { user },
+    profileIcon: profilePicturePaths[accountProfilePicture],
+  });
 });
 
 router.post("/profile/change-password", (req, res) => {
@@ -102,7 +112,7 @@ router.post("/profile/edit", (req, res) => {
       );
       return;
     }
-    res.status(400).send("Error editing user details. sgds");
+    res.status(400).send("Error editing user details.");
   } catch (error) {
     console.error("Error editing user details:", error);
     res.status(400).send("Error editing user details.");
