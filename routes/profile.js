@@ -18,8 +18,6 @@ const user = {
 };
 
 router.get("/profile", (req, res) => {
-  currentProfilePicture = getAccountProfilePicture();
-
   res.render("user-profile/profile", {
     title: "Profile",
     user: { user },
@@ -32,6 +30,7 @@ router.get("/profile/edit", (req, res) => {
   res.render("user-profile/edit-details", {
     title: "Edit Profile",
     user: { user },
+    profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
@@ -39,6 +38,7 @@ router.get("/profile/change-password", (req, res) => {
   res.render("user-profile/change-password", {
     title: "Change Password",
     user: { user },
+    profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
