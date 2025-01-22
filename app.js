@@ -25,6 +25,11 @@ app.set("view engine", "pug");
 // Sets a favicon for the website
 app.use(favicon(path.join(__dirname, "public", "resources", "favicon.ico")));
 
+// Lets static files to be served from /public
+app.use(
+  express.static(path.join(__dirname, "public", "resources", "profile-images"))
+);
+
 // Middleware
 // Parse URL-encoded bodies (as sent by HTML forms)
 // This middleware is needed to handle form submissions in our blog application
