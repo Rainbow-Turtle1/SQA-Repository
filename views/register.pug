@@ -1,28 +1,43 @@
 doctype html
 html
-   head
-      title Register
-      link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
-   body
-      .container
-         .row.justify-content-center
-            .col-md-6
-               h1.text-center Register
-               form(action='/register', method='POST')
-                  .form-group
-                     label(for='name') Name:
-                     input.form-control(type='text', name='name', id='name', required)
-                  .form-group
-                     label(for='email') Email:
-                     input.form-control(type='email', name='email', id='email', required)
-                  .form-group
-                     label(for='password') Password:
-                     input.form-control(type='password', name='password', id='password', required)
-                  .form-group
-                     label(for='confirmPassword') Confirm Password:
-                     input.form-control(type='password', name='confirmPassword', id='confirmPassword', required)
-                  .form-group
-                     button.btn.btn-primary.btn-block(type='submit') Register
-               .text-center
-                  p Have an account? 
-                     a(href='/login') Log in
+  head
+    title Register
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+    script(src='https://code.jquery.com/jquery-3.7.1.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js')
+  body
+    .container
+      .row.justify-content-center
+        .col-md-6
+          h1.text-center Register
+          form#registerForm
+            .form-group
+              label(for='name') Name:
+              input.form-control(type='text', name='name', id='name', required)
+            .form-group
+              label(for='email') Email:
+              input.form-control(type='email', name='email', id='email', required)
+            .form-group
+              label(for='password') Password:
+              input.form-control(type='password', name='password', id='password', required)
+            .form-group
+              label(for='confirmPassword') Confirm Password:
+              input.form-control(type='password', name='confirmPassword', id='confirmPassword', required)
+            .form-group
+              button.btn.btn-primary.btn-block(type='submit') Register
+          .text-center
+            p Already have an account? 
+              a(href='/login') Login
+    // Modal
+    .modal.fade#responseModal(tabindex='-1' role='dialog')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5.modal-title Response
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') &times;
+          .modal-body
+            p#responseMessage
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+    script(src='/js/register.js')

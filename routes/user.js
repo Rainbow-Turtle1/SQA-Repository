@@ -2,7 +2,6 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 const router = Router();
 import { User } from "../models/user.js";
-import { createRedirectResponse } from "./userUtil.js";
 
 // Register
 router.get("/register", (req, res) => {
@@ -13,44 +12,44 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
-
     if (!name || !email || !password) {
-      res.send(
-        createRedirectResponse(
-          "Sorry, but all fields are required to register a user! Redirecting to the registration page in 3 seconds...",
-          "/register"
-        )
-      );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required to register.",
+      });
     }
 
     if (password !== confirmPassword) {
-      res.send(
-        createRedirectResponse(
-          "The passwords you have entered do not match! Redirecting to the registration page in 3 seconds...",
-          "/register"
-        )
-      );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "Your passwords do not match. Please retry.",
+      });
     }
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      res.send(
-        createRedirectResponse(
-          "This email is already registered, why not log in? Redirecting to the login page in 3 seconds...",
-          "/login"
-        )
-      );
-      return;
+      return res.status(400).json({
+        success: false,
+        message:
+          "This email is already registered. Redirecting to the login page...",
+        redirectUrl: "/login",
+      });
     }
 
     const hash = await bcrypt.hash(password, 10);
     await User.create({ name, email, password: hash });
-    res.redirect("/");
+
+    return res.status(200).json({
+      success: true,
+      message: "Registration successful. Redirecting to the home page...",
+      redirectUrl: "/",
+    });
   } catch (error) {
-    console.error("Error registering new user:", error);
-    res.status(500).send("Error registering new user.");
+    console.error("Error during registration:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred. Please try again.",
+    });
   }
 });
 
@@ -64,44 +63,42 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.send(
-        createRedirectResponse(
-          "Sorry, but all fields are required to login! Redirecting to the login page in 3 seconds...",
-          "/login"
-        )
-      );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required to log in!",
+      });
     }
 
     // Find user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      res.send(
-        createRedirectResponse(
-          "You are not registered. Redirecting to the registration page in 3 seconds...",
-          "/register"
-        )
-      );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "You are not registered. Please register first.",
+      });
     }
 
     // Check password
     const doesPasswordMatch = await bcrypt.compare(password, user.password);
     if (!doesPasswordMatch) {
-      res.send(
-        createRedirectResponse(
-          "That was the wrong password, sorry! Redirecting to the login page in 3 seconds...",
-          "/login"
-        )
-      );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect password. Please try again.",
+      });
     }
 
     // Successful login
-    res.redirect("/");
+    return res.status(200).json({
+      success: true,
+      message: "Login successful. Redirecting to the home page...",
+      redirectUrl: "/",
+    });
   } catch (error) {
     console.error("Error logging in user:", error);
-    res.status(500).send("Error logging in user.");
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while logging in.",
+    });
   }
 });
 

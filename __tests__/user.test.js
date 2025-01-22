@@ -30,6 +30,7 @@ function mockResponse() {
   const res = {};
   res.status = jest.fn().mockReturnValue(res);
   res.send = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
   res.render = jest.fn().mockReturnValue(res);
   res.redirect = jest.fn().mockReturnValue(res);
   return res;
@@ -66,7 +67,6 @@ describe("GET /login", () => {
 });
 
 // POST Routes
-
 describe("POST /register happy cases", () => {
   it("should register a new user if inputs are valid", async () => {
     const req = mockRequest({
@@ -80,8 +80,6 @@ describe("POST /register happy cases", () => {
     await UserRoutes.stack
       .find((r) => r.route.path === "/register" && r.route.methods.post)
       .route.stack[0].handle(req, res);
-
-    expect(res.redirect).toHaveBeenCalledWith("/");
     const user = await User.findOne({
       where: { email: "Isabella@email.com" },
     });
@@ -105,11 +103,11 @@ describe("POST /register error cases", () => {
       .find((r) => r.route.path === "/register" && r.route.methods.post)
       .route.stack[0].handle(req, res);
 
-    expect(res.send).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "Sorry, but all fields are required to register a user!"
-      )
-    );
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "All fields are required to register.",
+    });
   });
 
   it("should return an error if passwords do not match", async () => {
@@ -125,9 +123,11 @@ describe("POST /register error cases", () => {
       .find((r) => r.route.path === "/register" && r.route.methods.post)
       .route.stack[0].handle(req, res);
 
-    expect(res.send).toHaveBeenCalledWith(
-      expect.stringContaining("The passwords you have entered do not match!")
-    );
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "Your passwords do not match. Please retry.",
+    });
   });
 });
 
@@ -150,7 +150,12 @@ describe("POST /login happy paths", () => {
       .find((r) => r.route.path === "/login" && r.route.methods.post)
       .route.stack[0].handle(req, res);
 
-    expect(res.redirect).toHaveBeenCalledWith("/");
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      success: true,
+      message: "Login successful. Redirecting to the home page...",
+      redirectUrl: "/",
+    });
   });
 });
 
@@ -166,9 +171,11 @@ describe("POST /login error cases", () => {
       .find((r) => r.route.path === "/login" && r.route.methods.post)
       .route.stack[0].handle(req, res);
 
-    expect(res.send).toHaveBeenCalledWith(
-      expect.stringContaining("Sorry, but all fields are required to login!")
-    );
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "All fields are required to log in!",
+    });
   });
 
   it("should return an error if the user is not registered", async () => {
@@ -182,15 +189,24 @@ describe("POST /login error cases", () => {
       .find((r) => r.route.path === "/login" && r.route.methods.post)
       .route.stack[0].handle(req, res);
 
-    expect(res.send).toHaveBeenCalledWith(
-      expect.stringContaining("You are not registered.")
-    );
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "You are not registered. Please register first.",
+    });
   });
 
   it("should return an error if the password is incorrect", async () => {
+    const password = await bcrypt.hash("securepassword", 10);
+    await User.create({
+      name: "Isabella",
+      email: "isabella@invalid.com",
+      password,
+    });
+
     const req = mockRequest({
-      email: "isabella@example.com",
-      password: "1234",
+      email: "isabella@invalid.com",
+      password: "apples",
     });
     const res = mockResponse();
 
@@ -198,10 +214,12 @@ describe("POST /login error cases", () => {
       .find((r) => r.route.path === "/login" && r.route.methods.post)
       .route.stack[0].handle(req, res);
 
-    expect(res.send).toHaveBeenCalledWith(
-      expect.stringContaining("That was the wrong password, sorry!")
-    );
-  });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "Incorrect password. Please try again.",
+    });
+  }); 
 
   it("should handle errors and send a 500 response if an exception occurs", async () => {
     const req = mockRequest({
@@ -219,7 +237,10 @@ describe("POST /login error cases", () => {
       .route.stack[0].handle(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.send).toHaveBeenCalledWith("Error logging in user.");
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      message: "An error occurred while logging in.",
+    });
     expect(spy).toHaveBeenCalledWith(
       "Error logging in user:",
       expect.any(Error)
