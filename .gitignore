@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # Database Files
-.sqlite
+*.sqlite
