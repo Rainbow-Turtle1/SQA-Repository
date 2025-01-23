@@ -1,7 +1,6 @@
 import { Router } from "express";
 const router = Router();
 // import { User } from '../models/user.js'
-import { createRedirectResponse } from "./user-util.js";
 import {
   getAccountProfilePicture,
   setAccountProfilePicture,
@@ -55,39 +54,27 @@ router.post("/profile/change-password", (req, res) => {
     const { oldPassword, newPassword, confirmPassword } = req.body;
 
     if (!oldPassword || !newPassword || !confirmPassword) {
-      res
-        .status(400)
-        .send(
-          createRedirectResponse(
-            "You must enter all fields.",
-            "/profile/change-password"
-          )
-        );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "You must enter all fields.",
+        redirectUrl: "/profile/change-password",
+      });
     }
 
     if (newPassword !== confirmPassword) {
-      res
-        .status(400)
-        .send(
-          createRedirectResponse(
-            "The new passwords you have entered do not match.",
-            "/profile/change-password"
-          )
-        );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "The new passwords you have entered do not match.",
+        redirectUrl: "/profile/change-password",
+      });
     }
 
     if (oldPassword === newPassword) {
-      res
-        .status(400)
-        .send(
-          createRedirectResponse(
-            "Your new password must be different from your old password.",
-            "/profile/change-password"
-          )
-        );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "Your new password must be different from your old password.",
+        redirectUrl: "/profile/change-password",
+      });
     }
 
     res.status(200).send("Password changed successfully.");
@@ -107,16 +94,30 @@ router.post("/profile/edit", (req, res) => {
     const { name, email } = req.body;
 
     if (!name && !email) {
-      res.send(
-        createRedirectResponse("You must amend either field.", "/profile/edit")
-      );
-      return;
+      return res.status(400).json({
+        success: false,
+        message: "You must amend either field.",
+        redirectUrl: "/profile/edit",
+      });
     }
     res.status(400).send("Error editing user details.");
   } catch (error) {
     console.error("Error editing user details:", error);
     res.status(400).send("Error editing user details.");
   }
+});
+
+router.post("/profile/delete-account", (req, res) => {
+  try {
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "You must enter your password to delete your account.",
+      });
+    }
+  } catch (error) {}
 });
 
 router.post("/profile", (req, res) => {
