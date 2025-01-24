@@ -47,7 +47,7 @@ describe("GET /register", () => {
       .find((r) => r.route.path === "/register" && r.route.methods.get)
       .route.stack[0].handle(req, res);
 
-    expect(res.render).toHaveBeenCalledWith("register", {
+    expect(res.render).toHaveBeenCalledWith("user-profile/register", {
       title: "Register",
     });
   });
@@ -62,7 +62,7 @@ describe("GET /login", () => {
       .find((r) => r.route.path === "/login" && r.route.methods.get)
       .route.stack[0].handle(req, res);
 
-    expect(res.render).toHaveBeenCalledWith("login", { title: "Login" });
+    expect(res.render).toHaveBeenCalledWith("user-profile/login", { title: "Login" });
   });
 });
 
@@ -191,8 +191,9 @@ describe("POST /login error cases", () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
-      success: false,
-      message: "You are not registered. Please register first.",
+    "message": "You are not registered. Please register first.",
+    "redirectUrl": "/register",
+    "success": false,
     });
   });
 

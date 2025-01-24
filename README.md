@@ -20,7 +20,8 @@ Our tests are structured to validate the application's behavior, as seen in the 
 ```javascript
 describe("GET /", () => {
   it("should ..test scenario", async () => {
-  }));
+  })
+});
 ```
 
 With this format, we validate both the HTTP response status and the presence of key elements on the page, ensuring that the user experience aligns with our expectations. By using BDD, we were able to remain adaptable while still maintaining confidence in our application's functionality.
@@ -54,7 +55,7 @@ before being stored.
 
 #### Example picture of database where password entered was 123 and it shows the hashed password
 
-![alt text](README_assets/exampledatabasehashing.png)
+![image of the database showing a users password being hashed](/public/resources/readme-assets/exampledatabasehashing.png)
 
 
 By using hashing with salting, we've significantly enhanced our password security. Users’ credentials are better protected against common attacks like rainbow table lookups and hash collisions, ensuring that their sensitive information remains confidential even in the event of a database breach.

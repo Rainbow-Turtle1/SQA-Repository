@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 // import { User } from '../models/user.js'
-import { createRedirectResponse } from "./userUtil.js";
+import { createRedirectResponse } from "./user-util.js";
 import {
   getAccountProfilePicture,
   setAccountProfilePicture,
@@ -20,7 +20,7 @@ const user = {
 router.get("/profile", (req, res) => {
   currentProfilePicture = getAccountProfilePicture();
 
-  res.render("profile", {
+  res.render("user-profile/profile", {
     title: "Profile",
     user: { user },
     profilePicture: profilePicturePaths[accountProfilePicture],
@@ -29,15 +29,15 @@ router.get("/profile", (req, res) => {
 });
 
 router.get("/profile/edit", (req, res) => {
-  res.render("edit-details", { title: "Edit Profile", user: { user } });
+  res.render("user-profile/edit-details", { title: "Edit Profile", user: { user } });
 });
 
 router.get("/profile/change-password", (req, res) => {
-  res.render("change-password", { title: "Change Password", user: { user } });
+  res.render("user-profile/change-password", { title: "Change Password", user: { user } });
 });
 
 router.get("/profile/delete-account", (req, res) => {
-  res.render("delete-account", { title: "Delete Account", user: { user } });
+  res.render("user-profile/delete-account", { title: "Delete Account", user: { user } });
 });
 
 router.post("/profile/change-password", (req, res) => {
@@ -117,7 +117,7 @@ router.post("/profile", (req, res) => {
       ? currentProfilePicture++
       : (currentProfilePicture = 0);
 
-    res.render("profile", {
+    res.render("user-profile/profile", {
       title: "Profile",
       user: { user },
       profilePicture: profilePicturePaths[currentProfilePicture],
@@ -128,7 +128,7 @@ router.post("/profile", (req, res) => {
       ? currentProfilePicture--
       : (currentProfilePicture = profilePicturePaths.length - 1);
 
-    res.render("profile", {
+    res.render("user-profile/profile", {
       title: "Profile",
       user: { user },
       profilePicture: profilePicturePaths[currentProfilePicture],
@@ -138,7 +138,7 @@ router.post("/profile", (req, res) => {
     setAccountProfilePicture(currentProfilePicture);
     accountProfilePicture = getAccountProfilePicture();
 
-    res.render("profile", {
+    res.render("user-profile/profile", {
       title: "Profile",
       user: { user },
       profilePicture: profilePicturePaths[accountProfilePicture],
