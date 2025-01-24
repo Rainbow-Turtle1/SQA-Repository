@@ -5,7 +5,7 @@ import { User } from "../models/user.js";
 
 // Register
 router.get("/register", (req, res) => {
-  res.render("register", { title: "Register" });
+  res.render("user-profile/register", { title: "Register" });
 });
 
 router.post("/register", async (req, res) => {
@@ -55,7 +55,7 @@ router.post("/register", async (req, res) => {
 
 // Login
 router.get("/login", (req, res) => {
-  res.render("login", { title: "Login" });
+  res.render("user-profile/login", { title: "Login" });
 });
 
 router.post("/login", async (req, res) => {
@@ -75,6 +75,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "You are not registered. Please register first.",
+        redirectUrl: "/register",
       });
     }
 

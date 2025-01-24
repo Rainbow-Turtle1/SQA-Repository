@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
   const posts = await BlogPost.findAll({ where: query, order: sortOption });
 
   accountProfilePicture = getAccountProfilePicture();
-  res.render("index", {
+  res.render("blog-posts/index", {
     title: "Blog Posts",
     posts,
     q,
@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
 
 router.get("/create", (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
-  res.render("create", {
+  res.render("blog-posts/create", {
     title: "Create Post",
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
@@ -60,7 +60,7 @@ router.get("/post/:id", async (req, res) => {
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
   if (post) {
-    res.render("post", {
+    res.render("blog-posts/post", {
       title: post.title,
       post,
       profileIcon: profilePicturePaths[accountProfilePicture],
@@ -74,7 +74,7 @@ router.get("/edit/:id", async (req, res) => {
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
   if (post) {
-    res.render("edit", {
+    res.render("blog-posts/edit", {
       title: "Edit Post",
       post,
       profileIcon: profilePicturePaths[accountProfilePicture],
@@ -117,7 +117,7 @@ router.get("/stats", async (req, res) => {
     min_length: Math.min(...lengths),
     total_length: lengths.reduce((a, b) => a + b, 0),
   };
-  res.render("stats", {
+  res.render("blog-posts/stats", {
     title: "Post Statistics",
     ...stats,
     profileIcon: profilePicturePaths[accountProfilePicture],
