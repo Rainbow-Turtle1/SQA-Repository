@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import { BlogPost } from "../models/index.js";
-import {Op, Sequelize} from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import {
   getAccountProfilePicture,
   profilePicturePaths,
@@ -16,18 +16,26 @@ router.get("/", async (req, res) => {
   if (q) {
     query = {
       [Op.or]: [
-        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${q.toLowerCase()}%`),
-        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('content')), 'LIKE', `%${q.toLowerCase()}%`)
-      ]
+        Sequelize.where(
+          Sequelize.fn("LOWER", Sequelize.col("title")),
+          "LIKE",
+          `%${q.toLowerCase()}%`
+        ),
+        Sequelize.where(
+          Sequelize.fn("LOWER", Sequelize.col("content")),
+          "LIKE",
+          `%${q.toLowerCase()}%`
+        ),
+      ],
     };
   }
 
   let sortOption = [];
   if (sort) {
-    const [key, order] = sort.split(':');
+    const [key, order] = sort.split(":");
     sortOption.push([key, order.toUpperCase()]);
   } else {
-    sortOption.push(['created_at', 'DESC']); // Default to newest first
+    sortOption.push(["created_at", "DESC"]); // Default to newest first
   }
 
   const posts = await BlogPost.findAll({ where: query, order: sortOption });
@@ -43,7 +51,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/create", (req, res) => {
+router.get("blog-posts/create", (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
   res.render("blog-posts/create", {
     title: "Create Post",

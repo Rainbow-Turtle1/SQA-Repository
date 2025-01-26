@@ -1,6 +1,7 @@
 doctype html
 html(lang="en")
   head
+    base(href="/")
     title= title
     link(rel="stylesheet", href="/css/styles.css")
   body
@@ -21,6 +22,6 @@ html(lang="en")
         a(href="/profile")
           img(class="profile-icon", src=profileIcon, alt='Profile Picture')
     main
-      h1= title
+      h1=title
       block content
-
+      block scripts
