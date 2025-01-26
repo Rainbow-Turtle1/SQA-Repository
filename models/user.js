@@ -1,7 +1,7 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import { DataTypes } from "sequelize";
+import sequelize from "../config/database.js";
 
-const User = sequelize.define('User', {
+const User = sequelize.define("User", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -16,5 +16,9 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
 });
+
+(async () => {
+  await sequelize.sync({ force: true });
+})();
 
 export { sequelize, User };

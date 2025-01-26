@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import 'jest-localstorage-mock';
-import { jest } from '@jest/globals';
-import { NewSessionToken } from '../routes/session-tokens.js';
-=======
 import "jest-localstorage-mock";
 import { jest } from "@jest/globals";
 import { NewSessionToken } from "../routes/session-tokens.js";
->>>>>>> 7a3d5f5 (fixing merge conflicts)
 
 beforeEach(() => {
   globalThis.sessionStorage = {
