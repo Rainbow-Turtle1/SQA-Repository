@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("blog-posts/create", (req, res) => {
+router.get("/create", (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
   res.render("blog-posts/create", {
     title: "Create Post",
