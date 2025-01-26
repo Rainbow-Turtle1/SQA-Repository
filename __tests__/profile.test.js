@@ -1,11 +1,13 @@
 import request from "supertest";
 import express from "express";
-import { sequelize } from "../models/user.js";
+import { User, sequelize } from "../models/user.js";
 import ProfileRoutes from "../routes/profile.js";
+import UserRoutes from "../routes/user.js";
 import {
   getAccountProfilePicture,
   setAccountProfilePicture,
 } from "../routes/shared-data.js";
+import jest from "jest-mock";
 
 const app = express();
 app.set("view engine", "pug");
@@ -14,11 +16,42 @@ app.use("/", ProfileRoutes);
 
 beforeAll(async () => {
   await sequelize.sync({ force: true });
+
+  // creates a user
+  const req = mockRequest({
+    name: "test",
+    email: "test@email.com",
+    password: "test",
+    confirmPassword: "test",
+  });
+  const res = mockResponse();
+
+  await UserRoutes.stack
+    .find((r) => r.route.path === "/register" && r.route.methods.post)
+    .route.stack[0].handle(req, res);
 });
 
 afterAll(async () => {
   await sequelize.close();
 });
+
+// Mock Request and Response objects
+function mockRequest(body = {}) {
+  return {
+    body,
+    session: {},
+  };
+}
+
+function mockResponse() {
+  const res = {};
+  res.status = jest.fn().mockReturnValue(res);
+  res.send = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  res.render = jest.fn().mockReturnValue(res);
+  res.redirect = jest.fn().mockReturnValue(res);
+  return res;
+}
 
 describe("GET Profile Routes", () => {
   test("GET /profile should render the profile page", async () => {
@@ -172,6 +205,65 @@ describe("POST /profile/edit", () => {
       .send({ name: "John Smith" });
 
     expect(response.status).toBe(400);
+  });
+});
+
+describe("POST /profile/delete-account", () => {
+  beforeEach(async () => {
+    // creates a user
+    const req = mockRequest({
+      name: "test",
+      email: "test@email.com",
+      password: "test",
+      confirmPassword: "test",
+    });
+    const res = mockResponse();
+
+    await UserRoutes.stack
+      .find((r) => r.route.path === "/register" && r.route.methods.post)
+      .route.stack[0].handle(req, res);
+  });
+
+  it("should return 200 if the user successfully deletes their account", async () => {
+    const req = mockRequest({
+      password: "test",
+    });
+    const res = mockResponse();
+
+    // deletes the logged in user
+    await ProfileRoutes.stack
+      .find(
+        (r) =>
+          r.route.path === "/profile/delete-account" && r.route.methods.post
+      )
+      .route.stack[0].handle(req, res);
+
+    const email = "test@email.com";
+    const user = await User.findOne({ where: { email } });
+
+    expect(user).toBeNull();
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+  it("should return 400 if the user does not enter a password", async () => {
+    const req = mockRequest({
+      password: null,
+    });
+    const res = mockResponse();
+
+    await ProfileRoutes.stack
+      .find(
+        (r) =>
+          r.route.path === "/profile/delete-account" && r.route.methods.post
+      )
+      .route.stack[0].handle(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+  it("should return 400 if the user is not currently logged in", async () => {
+    // blank until session tokens are added
+  });
+  it("should return 400 if the password does not match the currently logged in user", async () => {
+    // blank until session tokens are added
   });
 });
 

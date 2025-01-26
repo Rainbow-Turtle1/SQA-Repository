@@ -1,6 +1,7 @@
 import { Router } from "express";
 const router = Router();
-// import { User } from '../models/user.js'
+import bcrypt from "bcryptjs";
+import { User } from "../models/user.js";
 import {
   getAccountProfilePicture,
   setAccountProfilePicture,
@@ -107,17 +108,51 @@ router.post("/profile/edit", (req, res) => {
   }
 });
 
-router.post("/profile/delete-account", (req, res) => {
+router.post("/profile/delete-account", async (req, res) => {
   try {
     const { password } = req.body;
+    const email = "test@email.com";
+    const user = await User.findOne({ where: { email } });
+
+    console.log("Password:", password);
+    console.log("Existing User:", user.name, user.password);
 
     if (!password) {
       return res.status(400).json({
         success: false,
         message: "You must enter your password to delete your account.",
+        redirectUrl: "/profile/delete-account",
       });
     }
-  } catch (error) {}
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "You don't have an account!",
+        redirectUrl: "/register",
+      });
+    }
+
+    const doesPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!doesPasswordMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect password. Please try again.",
+        redirectUrl: "/profile/delete-account",
+      });
+    }
+
+    await user.destroy();
+
+    return res.status(200).json({
+      success: true,
+      message: "Successfully deleted account.",
+      redirectUrl: "/register",
+    });
+  } catch (error) {
+    console.error("Error editing user details:", error);
+    res.status(400).send("Error editing user details.");
+  }
 });
 
 router.post("/profile", (req, res) => {
