@@ -1,7 +1,12 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import { DataTypes } from "sequelize";
+import sequelize from "../config/database.js";
 
-const User = sequelize.define('User', {
+const User = sequelize.define("User", {
+  uuid: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,

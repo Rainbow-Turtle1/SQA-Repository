@@ -13,7 +13,6 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
-
     if (!name || !email || !password) {
       res.send(
         createRedirectResponse(
@@ -46,7 +45,8 @@ router.post("/register", async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hash });
+    uuid = generateUuid();
+    await User.create({ uuid, name, email, password: hash });
     res.redirect("/");
   } catch (error) {
     console.error("Error registering new user:", error);
@@ -98,6 +98,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Successful login
+    // generate session token. HERE!
     res.redirect("/");
   } catch (error) {
     console.error("Error logging in user:", error);
