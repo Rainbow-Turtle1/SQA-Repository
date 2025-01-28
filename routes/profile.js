@@ -131,7 +131,15 @@ router.post("/profile/edit", async (req, res) => {
           },
         }
       );
-    } else {
+    } else if (name && email) {
+      const checkAgainstDBUser = await User.findOne({ where: { email } });
+      if (checkAgainstDBUser && checkAgainstDBUser.email !== user.email) {
+        return res.status(400).json({
+          success: false,
+          message: "Email already exists.",
+          redirectUrl: "/profile/edit",
+        });
+      }
       User.update(
         { name, email },
         {
