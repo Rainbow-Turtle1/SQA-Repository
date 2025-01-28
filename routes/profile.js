@@ -84,8 +84,7 @@ router.post("/profile/change-password", (req, res) => {
     // > make sure that the user is authenticated
     // > make sure that the old password is correct
     // > update the user's password in the database
-  } catch (error) {
-    console.error("Error changing password:", error);
+  } catch {
     res.status(400).send("Error changing password.");
   }
 });
@@ -155,7 +154,7 @@ router.post("/profile/edit", async (req, res) => {
       message: "Successfully edited user details.",
       redirectUrl: "/profile",
     });
-  } catch (error) {
+  } catch {
     res.status(400).json({
       success: false,
       message: "Error editing user details.",
@@ -205,8 +204,7 @@ router.post("/profile/delete-account", async (req, res) => {
       message: "Successfully deleted account.",
       redirectUrl: "/register",
     });
-  } catch (error) {
-    console.error("Error editing user details:", error);
+  } catch {
     res.status(400).send("Error editing user details.");
   }
 });
