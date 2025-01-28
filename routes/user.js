@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 const router = Router();
 import { User } from "../models/user.js";
+import { NewSessionToken, tokenIsValid } from "../routes/sessionTokens.js";
 import { createRedirectResponse } from "./userUtil.js";
 
 // Register
@@ -45,7 +47,7 @@ router.post("/register", async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    uuid = generateUuid();
+    const uuid = uuidv4();
     await User.create({ uuid, name, email, password: hash });
     res.redirect("/");
   } catch (error) {
@@ -98,7 +100,8 @@ router.post("/login", async (req, res) => {
     }
 
     // Successful login
-    // generate session token. HERE!
+    NewSessionToken(user.uuid);
+    console.log(tokenIsValid(user.uuid));
     res.redirect("/");
   } catch (error) {
     console.error("Error logging in user:", error);

@@ -86,6 +86,7 @@ describe("POST /register happy cases", () => {
       where: { email: "Isabella@email.com" },
     });
     expect(user).not.toBeNull();
+    expect(user.uuid).not.toBeNull();
     expect(await bcrypt.compare("1234", user.password)).toBe(true);
   });
 });
@@ -135,6 +136,7 @@ describe("POST /login happy paths", () => {
   it("should log in a user if credentials are valid", async () => {
     const password = await bcrypt.hash("securepassword", 10);
     await User.create({
+      uuid: "010101",
       name: "Isabella",
       email: "isabella@example.com",
       password,
