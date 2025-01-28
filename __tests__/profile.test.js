@@ -197,17 +197,6 @@ describe("POST /profile and test profile picture functionality", () => {
   });
 });
 
-describe("POST /profile/edit", () => {
-  it("should return 400 if the user incorrectly enters their name & email", async () => {
-    const response = await request(app)
-      .post("/profile/edit")
-      .type("form")
-      .send({ name: "John Smith" });
-
-    expect(response.status).toBe(400);
-  });
-});
-
 describe("POST /profile/delete-account", () => {
   beforeEach(async () => {
     // creates a user
@@ -272,7 +261,83 @@ describe("POST /profile/delete-account", () => {
 // 148 is changing the profile picture
 
 describe("POST /profile/edit and test edit details functionality", () => {
-  it("should return 200 if the user can change both their name & email", async () => {});
-  it("should return 200 if the user can change only their name", async () => {});
-  it("should return 200 if the user can change only their email", async () => {});
+  it("should return 200 if the user can change both their name & email", async () => {
+    const response = await request(app)
+      .post("/profile/edit")
+      .type("form")
+      .send({
+        name: "Test Name",
+        email: "test.name@email.com",
+      });
+
+    const user = await User.findOne({
+      where: { email: "test.name@email.com" },
+    });
+
+    expect(user.name).toBe("Test Name");
+    expect(user.email).toBe("test.name@email.com");
+    expect(response.status).toBe(200);
+  });
+  it("should return 200 if the user can change only their name", async () => {
+    const response = await request(app)
+      .post("/profile/edit")
+      .type("form")
+      .send({
+        name: "Test Name",
+      });
+
+    const user = await User.findOne({
+      where: { email: "test.name@email.com" },
+    });
+
+    expect(user.name).toBe("Test Name");
+    expect(response.status).toBe(200);
+  });
+  it("should return 200 if the user can change only their email", async () => {
+    const response = await request(app)
+      .post("/profile/edit")
+      .type("form")
+      .send({
+        email: "test.name@email.com",
+      });
+
+    const user = await User.findOne({
+      where: { email: "test.name@email.com" },
+    });
+
+    expect(user.email).toBe("test.name@email.com");
+    expect(response.status).toBe(200);
+  });
+  it("should return 400 if the user doesn't input a new name or email", async () => {
+    const response = await request(app)
+      .post("/profile/edit")
+      .type("form")
+      .send({});
+
+    expect(response.status).toBe(400);
+  });
+  it("should return 400 if the user tries to change their email to one that already exists in the database", async () => {
+    // const req = mockRequest({
+    //   name: "Test Water Bottle",
+    //   email: "test@email.com",
+    //   password: "test",
+    //   confirmPassword: "test",
+    // });
+    // const res = mockResponse();
+    // await UserRoutes.stack
+    //   .find((r) => r.route.path === "/register" && r.route.methods.post)
+    //   .route.stack[0].handle(req, res);
+    // const response = await request(app)
+    //   .post("/profile/edit")
+    //   .type("form")
+    //   .send({
+    //     name: "Water Bottle",
+    //     email: "test@email.com",
+    //   });
+    // expect(response.status).toBe(400);
+    // requires session tokens to test
+  });
+  it("should return 400 if the user tries to change their email to an invalid one", async () => {
+    // requires session tokens to test
+  });
 });
