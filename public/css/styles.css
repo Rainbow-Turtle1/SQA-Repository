@@ -323,3 +323,8 @@ button.danger:hover {
     transform: translateY(0);
   }
 }
+
+.form-control {
+  display: flex;
+  width: 30%;
+}
