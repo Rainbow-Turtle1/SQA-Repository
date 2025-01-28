@@ -90,9 +90,11 @@ router.post("/profile/change-password", (req, res) => {
   }
 });
 
-router.post("/profile/edit", (req, res) => {
+router.post("/profile/edit", async (req, res) => {
   try {
     const { name, email } = req.body;
+    const mockUserEmail = "test@email.com"; //mocking a logged in user's email
+    const user = await User.findOne({ where: { email: mockUserEmail } }); // find the user that needs to be updated
 
     if (!name && !email) {
       return res.status(400).json({
@@ -101,10 +103,56 @@ router.post("/profile/edit", (req, res) => {
         redirectUrl: "/profile/edit",
       });
     }
-    res.status(400).send("Error editing user details.");
+
+    if (name && email === "") {
+      User.update(
+        { name },
+        {
+          where: {
+            email: mockUserEmail,
+          },
+        }
+      );
+    } else if (email && name === "") {
+      const checkAgainstDBUser = await User.findOne({ where: { email } });
+      if (checkAgainstDBUser && checkAgainstDBUser.email !== user.email) {
+        return res.status(400).json({
+          success: false,
+          message: "Email already exists.",
+          redirectUrl: "/profile/edit",
+        });
+      }
+
+      User.update(
+        { email },
+        {
+          where: {
+            email: mockUserEmail,
+          },
+        }
+      );
+    } else {
+      User.update(
+        { name, email },
+        {
+          where: {
+            email: mockUserEmail,
+          },
+        }
+      );
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Successfully edited user details.",
+      redirectUrl: "/profile",
+    });
   } catch (error) {
-    console.error("Error editing user details:", error);
-    res.status(400).send("Error editing user details.");
+    res.status(400).json({
+      success: false,
+      message: "Error editing user details.",
+      redirectUrl: "/profile/edit",
+    });
   }
 });
 

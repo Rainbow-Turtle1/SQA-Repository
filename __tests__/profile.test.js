@@ -270,3 +270,9 @@ describe("POST /profile/delete-account", () => {
 // 90-91 is password changing
 // 105-108 is editing the profile
 // 148 is changing the profile picture
+
+describe("POST /profile/edit and test edit details functionality", () => {
+  it("should return 200 if the user can change both their name & email", async () => {});
+  it("should return 200 if the user can change only their name", async () => {});
+  it("should return 200 if the user can change only their email", async () => {});
+});

@@ -4,7 +4,7 @@ block content
     p Amend your name and email below.
     p Note: You cannot change your email address to one that is already in use.
     p Currently, your name is #{user.user.name} and your email is #{user.user.email}.
-    form(action='/profile/edit', method='POST')
+    form#editProfileForm(action='/profile/edit', method='POST')
         .form-group
             label(for='name') Name:
             input#name.form-control(type='text', name='name')
@@ -12,3 +12,22 @@ block content
             label(for='email') Email:
             input#email.form-control(type='text', name='email')
         button.btn.btn-primary.btn-block(type='submit') Submit Changes
+
+    // Modal
+    .modal.fade#responseModal(tabindex='-1' role='dialog')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5.modal-title Response
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+            .modal-body
+                p#responseMessage
+            .modal-footer
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+    
+
+block scripts
+  script(src='https://code.jquery.com/jquery-3.7.1.min.js')
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js')
+  script(src='/js/edit-profile.js')
