@@ -317,25 +317,24 @@ describe("POST /profile/edit and test edit details functionality", () => {
     expect(response.status).toBe(400);
   });
   it("should return 400 if the user tries to change their email to one that already exists in the database", async () => {
-    // const req = mockRequest({
-    //   name: "Test Water Bottle",
-    //   email: "test@email.com",
-    //   password: "test",
-    //   confirmPassword: "test",
-    // });
-    // const res = mockResponse();
-    // await UserRoutes.stack
-    //   .find((r) => r.route.path === "/register" && r.route.methods.post)
-    //   .route.stack[0].handle(req, res);
-    // const response = await request(app)
-    //   .post("/profile/edit")
-    //   .type("form")
-    //   .send({
-    //     name: "Water Bottle",
-    //     email: "test@email.com",
-    //   });
-    // expect(response.status).toBe(400);
-    // requires session tokens to test
+    const req = mockRequest({
+      name: "Test Water Bottle",
+      email: "testing@email.com",
+      password: "test",
+      confirmPassword: "test",
+    });
+    const res = mockResponse();
+    await UserRoutes.stack
+      .find((r) => r.route.path === "/register" && r.route.methods.post)
+      .route.stack[0].handle(req, res);
+    const response = await request(app)
+      .post("/profile/edit")
+      .type("form")
+      .send({
+        name: "Water Bottle",
+        email: "testing@email.com",
+      });
+    expect(response.status).toBe(400);
   });
   it("should return 400 if the user tries to change their email to an invalid one", async () => {
     // requires session tokens to test
