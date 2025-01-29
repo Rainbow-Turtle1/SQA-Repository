@@ -50,9 +50,11 @@ router.get("/profile/delete-account", (req, res) => {
   });
 });
 
-router.post("/profile/change-password", (req, res) => {
+router.post("/profile/change-password", async (req, res) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
+    const email = "test@email.com";
+    const user = await User.findOne({ where: { email } });
 
     if (!oldPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({
@@ -78,14 +80,32 @@ router.post("/profile/change-password", (req, res) => {
       });
     }
 
-    res.status(200).send("Password changed successfully.");
+    const doesPasswordMatch = await bcrypt.compareSync(
+      oldPassword,
+      user.password
+    );
 
-    // need to add the functionality to:
-    // > make sure that the user is authenticated
-    // > make sure that the old password is correct
-    // > update the user's password in the database
+    if (!doesPasswordMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "The old password you entered is incorrect.",
+        redirectUrl: "/profile/change-password",
+      });
+    }
+
+    const newHash = await bcrypt.hash(newPassword, 10);
+    await User.update({ password: newHash }, { where: { email } });
+
+    res.status(200).json({
+      success: true,
+      message: "Password successfully changed.",
+      redirectUrl: "/profile",
+    });
   } catch {
-    res.status(400).send("Error changing password.");
+    res.status(500).json({
+      success: false,
+      message: "Error changing password.",
+    });
   }
 });
 
@@ -197,7 +217,7 @@ router.post("/profile/delete-account", async (req, res) => {
       });
     }
 
-    await user.destroy();
+    await User.destroy({ where: { email } });
 
     return res.status(200).json({
       success: true,
