@@ -8,6 +8,7 @@ import {
   setAccountProfilePicture,
 } from "../routes/shared-data.js";
 import jest from "jest-mock";
+import bcrypt from "bcryptjs";
 
 const app = express();
 app.set("view engine", "pug");
@@ -17,25 +18,20 @@ app.use("/", ProfileRoutes);
 beforeAll(async () => {
   await sequelize.sync({ force: true });
 
-  // creates a user
-  const req = mockRequest({
+  await User.destroy({ where: {} });
+
+  await User.create({
     name: "test",
     email: "test@email.com",
-    password: "test",
-    confirmPassword: "test",
+    password: await bcrypt.hash("test", 10),
   });
-  const res = mockResponse();
-
-  await UserRoutes.stack
-    .find((r) => r.route.path === "/register" && r.route.methods.post)
-    .route.stack[0].handle(req, res);
 });
 
 afterAll(async () => {
   await sequelize.close();
 });
 
-// Mock Request and Response objects
+// Mock Request and sesponse objects
 function mockRequest(body = {}) {
   return {
     body,
@@ -145,7 +141,7 @@ describe("POST /profile/change-password", () => {
       .post("/profile/change-password")
       .type("form")
       .send({
-        oldPassword: "password123",
+        oldPassword: "test",
         newPassword: "newpassword123",
         confirmPassword: "newpassword123",
       });
@@ -198,55 +194,28 @@ describe("POST /profile and test profile picture functionality", () => {
 });
 
 describe("POST /profile/delete-account", () => {
-  beforeEach(async () => {
-    // creates a user
-    const req = mockRequest({
-      name: "test",
-      email: "test@email.com",
-      password: "test",
-      confirmPassword: "test",
-    });
-    const res = mockResponse();
-
-    await UserRoutes.stack
-      .find((r) => r.route.path === "/register" && r.route.methods.post)
-      .route.stack[0].handle(req, res);
-  });
-
   it("should return 200 if the user successfully deletes their account", async () => {
-    const req = mockRequest({
-      password: "test",
-    });
-    const res = mockResponse();
+    const deleteAccountResponse = await request(app)
+      .post("/profile/delete-account")
+      .type("form")
+      .send({
+        password: "test",
+      });
 
-    // deletes the logged in user
-    await ProfileRoutes.stack
-      .find(
-        (r) =>
-          r.route.path === "/profile/delete-account" && r.route.methods.post
-      )
-      .route.stack[0].handle(req, res);
+    const user = await User.findOne({ where: { email: "test@email.com" } });
 
-    const email = "test@email.com";
-    const user = await User.findOne({ where: { email } });
-
-    expect(user).toBeNull();
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(user).toBe(null);
+    expect(deleteAccountResponse.status).toBe(200);
   });
   it("should return 400 if the user does not enter a password", async () => {
-    const req = mockRequest({
-      password: null,
-    });
-    const res = mockResponse();
+    const deleteAccountResponse = await request(app)
+      .post("/profile/delete-account")
+      .type("form")
+      .send({
+        password: null,
+      });
 
-    await ProfileRoutes.stack
-      .find(
-        (r) =>
-          r.route.path === "/profile/delete-account" && r.route.methods.post
-      )
-      .route.stack[0].handle(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(deleteAccountResponse.status).toBe(400);
   });
   it("should return 400 if the user is not currently logged in", async () => {
     // blank until session tokens are added
@@ -255,10 +224,6 @@ describe("POST /profile/delete-account", () => {
     // blank until session tokens are added
   });
 });
-
-// 90-91 is password changing
-// 105-108 is editing the profile
-// 148 is changing the profile picture
 
 describe("POST /profile/edit and test edit details functionality", () => {
   it("should return 200 if the user can change both their name & email", async () => {
