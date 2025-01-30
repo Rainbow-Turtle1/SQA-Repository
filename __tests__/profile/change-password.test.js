@@ -1,8 +1,7 @@
 import request from "supertest";
 import express from "express";
-import { User, sequelize } from "../../models/user.js";
+import { User } from "../../models/user.js";
 import ProfileRoutes from "../../routes/profile.js";
-import UserRoutes from "../../routes/user.js";
 import bcrypt from "bcryptjs";
 
 const app = express();
