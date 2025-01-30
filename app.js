@@ -11,6 +11,9 @@ import blogRoutes from "./routes/blog.js";
 import userRoutes from "./routes/user.js";
 import profileRoutes from "./routes/profile.js";
 import favicon from "serve-favicon";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,8 +34,22 @@ app.use(
 );
 
 // Middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "supersecretkey", // Replace with a strong, environment-based secret
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true, // Prevents XSS attacks
+      secure: process.env.NODE_ENV === "production", // Only send cookies over HTTPS in production
+      sameSite: "Strict", // Prevents CSRF attacks
+      maxAge: 24 * 60 * 60 * 1000, // 1-day expiration
+    },
+  })
+);
 // Parse URL-encoded bodies (as sent by HTML forms)
 // This middleware is needed to handle form submissions in our blog application
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'public' directory
