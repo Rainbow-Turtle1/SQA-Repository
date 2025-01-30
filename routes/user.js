@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 const router = Router();
 import { User } from "../models/user.js";
-import { NewSessionToken, tokenIsValid } from "../routes/sessionTokens.js";
+import { NewSessionToken } from "../routes/session-tokens.js";
 
 // Register
 router.get("/register", (req, res) => {
@@ -92,6 +92,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Successful login
+    NewSessionToken(user.uuid)
     return res.status(200).json({
       success: true,
       message: "Login successful. Redirecting to the home page...",
