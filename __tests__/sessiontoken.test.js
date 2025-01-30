@@ -1,14 +1,12 @@
 import "jest-localstorage-mock";
-import { afterEach, jest } from "@jest/globals";
+import { afterAll, jest } from "@jest/globals";
 import { NewSessionToken } from "../routes/session-tokens.js";
+import { sequelize } from "../models/user.js";
 
 beforeEach(() => {
   sessionStorage.clear();
   jest.clearAllMocks();
-  // globalThis.sessionStorage = {
-  //   getItem: jest.fn().mockReturnValue(null),
-  //   setItem: jest.fn(),
-  // };
+
 });
 
 afterAll(async () => {
