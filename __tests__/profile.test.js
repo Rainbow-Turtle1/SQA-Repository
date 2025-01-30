@@ -3,7 +3,6 @@ import express from "express";
 import { User, sequelize } from "../models/user.js";
 import ProfileRoutes from "../routes/profile.js";
 import UserRoutes from "../routes/user.js";
-//import { NewSessionToken } from "../routes/session-tokens.js";
 import {
   getAccountProfilePicture,
   setAccountProfilePicture,
