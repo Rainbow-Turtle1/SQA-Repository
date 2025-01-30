@@ -11,9 +11,9 @@ beforeEach(() => {
   // };
 });
 
-// afterEach(() => {
-//   jest.restoreAllMocks()
-// })
+afterAll(async () => {
+  await sequelize.close(); // Properly close database connection
+});
 
 test("NewSessionToken creates a token if none exists", () => {
   sessionStorage.getItem.mockReturnValue(null);
