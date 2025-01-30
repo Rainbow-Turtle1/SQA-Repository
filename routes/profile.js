@@ -189,9 +189,6 @@ router.post("/profile/delete-account", async (req, res) => {
     const email = "test@email.com";
     const user = await User.findOne({ where: { email } });
 
-    console.log("Password:", password);
-    console.log("Existing User:", user.name, user.password);
-
     if (!password) {
       return res.status(400).json({
         success: false,
