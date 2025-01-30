@@ -34,7 +34,7 @@ function getCurrentDate() {
 }
 
 
-export { NewSessionToken, GenerateSessionToken, tokenIsValid };
+export { NewSessionToken, tokenIsValid };
 
 
 // depricated:
