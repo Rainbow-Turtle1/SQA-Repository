@@ -41,7 +41,7 @@ router.post("/register", async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     const uuid = uuidv4();
     await User.create({ uuid, name, email, password: hash });
-    NewSessionToken(uuid);
+    NewSessionToken(req, uuid);
 
     return res.status(200).json({
       success: true,
@@ -93,7 +93,8 @@ router.post("/login", async (req, res) => {
     }
 
     // Successful login
-    NewSessionToken(user.uuid)
+    NewSessionToken(req, user.uuid)
+    
     return res.status(200).json({
       success: true,
       message: "Login successful. Redirecting to the home page...",
