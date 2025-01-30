@@ -1,13 +1,19 @@
 import "jest-localstorage-mock";
-import { jest } from "@jest/globals";
+import { afterEach, jest } from "@jest/globals";
 import { NewSessionToken } from "../routes/session-tokens.js";
 
 beforeEach(() => {
-  globalThis.sessionStorage = {
-    getItem: jest.fn().mockReturnValue(null),
-    setItem: jest.fn(),
-  };
+  sessionStorage.clear();
+  jest.clearAllMocks();
+  // globalThis.sessionStorage = {
+  //   getItem: jest.fn().mockReturnValue(null),
+  //   setItem: jest.fn(),
+  // };
 });
+
+// afterEach(() => {
+//   jest.restoreAllMocks()
+// })
 
 test("NewSessionToken creates a token if none exists", () => {
   sessionStorage.getItem.mockReturnValue(null);
