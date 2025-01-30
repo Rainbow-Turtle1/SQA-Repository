@@ -41,6 +41,7 @@ router.post("/register", async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     const uuid = uuidv4();
     await User.create({ uuid, name, email, password: hash });
+    NewSessionToken(uuid);
 
     return res.status(200).json({
       success: true,
