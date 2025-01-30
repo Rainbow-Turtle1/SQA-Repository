@@ -139,7 +139,7 @@ describe("POST /login happy paths", () => {
   it("should log in a user if credentials are valid", async () => {
     const password = await bcrypt.hash("securepassword", 10);
     await User.create({
-      uuid: "010101"
+      uuid: "010101",
       name: "Isabella",
       email: "isabella@example.com",
       password,
