@@ -1,11 +1,10 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize"; // Import Sequelize
 import sequelize from "../config/database.js";
-import { v4 as uuidv4 } from "uuid";
 
 const User = sequelize.define("User", {
   uuid: {
     type: DataTypes.UUID,
-    defaultValue: uuidv4,
+    defaultValue: Sequelize.UUIDV4, // ✅ Correct way
     allowNull: false,
     unique: true,
   },
@@ -24,4 +23,4 @@ const User = sequelize.define("User", {
   },
 });
 
-export default User;
+export { sequelize, User };

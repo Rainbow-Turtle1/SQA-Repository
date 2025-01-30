@@ -1,10 +1,13 @@
+import { jest } from "@jest/globals";
 import express from "express";
 import bcrypt from "bcryptjs";
 import { sequelize, User } from "../models/user.js";
 import UserRoutes from "../routes/user.js";
-import jest from "jest-mock";
+import request from "supertest";
+import app from "../app.js";
+import "jest-localstorage-mock";
 
-const app = express();
+//const app = express();
 app.set("view engine", "pug");
 app.use(express.urlencoded({ extended: true }));
 app.use("/", UserRoutes);
@@ -22,9 +25,15 @@ afterAll(async () => {
 function mockRequest(body = {}) {
   return {
     body,
-    session: {},
+    session: {
+      destroy: jest.fn(),
+    },
   };
 }
+// jest.mock("express-session", () => () => (req, res, next) => {
+//   req.session = {};
+//   next();
+// });
 
 function mockResponse() {
   const res = {};
@@ -39,17 +48,9 @@ function mockResponse() {
 // GET Routes
 describe("GET /register", () => {
   it("should render the register page", async () => {
-    const req = mockRequest();
-    const res = mockResponse();
-
-    // Manually call the route handler
-    await UserRoutes.stack
-      .find((r) => r.route.path === "/register" && r.route.methods.get)
-      .route.stack[0].handle(req, res);
-
-    expect(res.render).toHaveBeenCalledWith("user-profile/register", {
-      title: "Register",
-    });
+    const res = await request(app).get("/register");
+    expect(res.statusCode).toBe(200);
+    expect(res.text).toContain("Register"); // Check if Register page is loaded
   });
 });
 
@@ -205,7 +206,7 @@ describe("POST /login error cases", () => {
   it("should return an error if the password is incorrect", async () => {
     const password = await bcrypt.hash("securepassword", 10);
     await User.create({
-      uuid: '0',
+      uuid: "0",
       name: "Isabella",
       email: "isabella@invalid.com",
       password,
