@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 const router = Router();
 import { User } from "../models/user.js";
+import { NewSessionToken, tokenIsValid } from "../routes/sessionTokens.js";
 
 // Register
 router.get("/register", (req, res) => {
@@ -37,7 +39,8 @@ router.post("/register", async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hash });
+    const uuid = uuidv4();
+    await User.create({ uuid, name, email, password: hash });
 
     return res.status(200).json({
       success: true,
