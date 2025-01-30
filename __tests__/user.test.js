@@ -6,6 +6,7 @@ import UserRoutes from "../routes/user.js";
 import request from "supertest";
 import app from "../app.js";
 import "jest-localstorage-mock";
+import { v4 as uuidv4 } from "uuid";
 
 //const app = express();
 app.set("view engine", "pug");
@@ -202,11 +203,11 @@ describe("POST /login error cases", () => {
       success: false,
     });
   });
-
   it("should return an error if the password is incorrect", async () => {
     const password = await bcrypt.hash("securepassword", 10);
+    const uuid = uuidv4();
     await User.create({
-      uuid: "0",
+      uuid: uuid,
       name: "Isabella",
       email: "isabella@invalid.com",
       password,

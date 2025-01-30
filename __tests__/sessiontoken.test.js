@@ -1,5 +1,5 @@
 import "jest-localstorage-mock";
-import { jest } from "@jest/globals"; // ✅ Ensures jest functions work
+import { jest } from "@jest/globals";
 import { NewSessionToken, tokenIsValid } from "../routes/session-tokens.js";
 import { sequelize } from "../models/user.js";
 
@@ -15,17 +15,15 @@ afterAll(async () => {
   await sequelize.close();
 });
 
-// ✅ Mock Request Object with a destroy function
 function MockReq() {
   return {
     session: {
       user: null,
-      destroy: jest.fn(), // ✅ Ensures destroy() can be called in tests
+      destroy: jest.fn(),
     },
   };
 }
 
-// ✅ Generate a dynamic current date for testing
 function getCurrentTestDate() {
   let date = new Date();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -33,27 +31,24 @@ function getCurrentTestDate() {
   return `${date.getFullYear()}${month}${day}`;
 }
 
-// ✅ Test NewSessionToken creates a token correctly
 test("NewSessionToken creates a token if none exists", () => {
   const req = MockReq();
   NewSessionToken(req, "id-for-tests");
   expect(req.session.user).toEqual({
     id: "id-for-tests",
-    date: getCurrentTestDate(), // ✅ Matches the dynamically generated date
+    date: getCurrentTestDate(),
   });
 });
 
-// ✅ Test tokenIsValid correctly verifies a valid session token
 test("tokenIsValid should return true for a valid session token", () => {
   const req = MockReq();
   req.session.user = {
     id: "uuid-123",
-    date: getCurrentTestDate(), // ✅ Ensures date matches today's date
+    date: getCurrentTestDate(),
   };
   expect(tokenIsValid(req)).toBe(true);
 });
 
-// ✅ Test tokenIsValid correctly invalidates an expired session token
 test("tokenIsValid should return false for an expired token and call session.destroy", () => {
   const req = MockReq();
   req.session.user = {
@@ -64,7 +59,6 @@ test("tokenIsValid should return false for an expired token and call session.des
   expect(req.session.destroy).toHaveBeenCalled(); // ✅ Ensures destroy() was called
 });
 
-// ✅ Test tokenIsValid correctly handles missing session token
 test("tokenIsValid should return false if no user session exists", () => {
   const req = MockReq();
   expect(tokenIsValid(req)).toBe(false);
