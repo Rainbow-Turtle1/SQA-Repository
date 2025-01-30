@@ -3,10 +3,13 @@ import { afterAll, jest } from "@jest/globals";
 import { NewSessionToken } from "../routes/session-tokens.js";
 import { sequelize } from "../models/user.js";
 
+beforeAll(async () => {
+  await sequelize.sync({ force: true });
+});
+
 beforeEach(() => {
   sessionStorage.clear();
   jest.clearAllMocks();
-
 });
 
 afterAll(async () => {
