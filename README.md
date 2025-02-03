@@ -76,6 +76,10 @@ With this format, we validate both the HTTP response status and the presence of 
 
 ### Evidence of achieving the coverage report
 
+Attached is the test coverage report **(NEEDS TO BE UPDATED)**
+
+![alt text](/public/resources/readme-assets/test-coverage.png)
+
 ### How edge cases and error conditions were tested
 
 The primary way in which edge cases were identified was through carefully thinking about how potential users of the app would use it. Across the website, there are places where input forms are used - users could potentially enter nothing into the input fields and potentially risk sending bad requests to modify the database. To reduce the risk of this, we modified the input field component to not accept blank inputs and force the user to input text before submitting the form.
@@ -129,7 +133,11 @@ By using hashing with salting, we've significantly enhanced our password securit
 
 For the Profile page, initially all of the test suites were held within one file, although separated by distinct describe blocks. However, it was getting difficult to work on the file because of the amount of unrelated tests. As a solution, we decided to split up the tests into their individual functionalities (edit details, delete account etc.)
 
+![alt text](/public/resources/readme-assets/profile-tests.png)
+
 This made the tests much easier to work with, because there was a 'separation of concerns' between the various test files.
+
+![alt text](/public/resources/readme-assets/pug-folder.png)
 
 We also refactored the views folder containing the `.pug` files, because as we added new page views, it became more difficult to find a particular file. Each `.pug` file is now categorised into being under either **blog-posts** or **user-profile**, this made it a lot easier for us to find the file that we were looking for while developing.
 
@@ -137,9 +145,11 @@ We also refactored the views folder containing the `.pug` files, because as we a
 
 ## CI/CD and Git Practices
 
-### GitHub Actions Used/public/resources/readme-assets/exampledatabasehashing.png
+### GitHub Actions Used
 
 After a pull request had been made, we added a couple of GitHub actions to our repository for both linting and testing our code.
+
+![alt text](/public/resources/readme-assets/pr-checks.png)
 
 #### Linting Code
 
@@ -153,3 +163,9 @@ We opted for ESLint due to its flexibility and wide adoption within the JavaScri
 We streamlined the CI process by automating functionality tests. This workflow triggers whenever changes are pushed or when pull requests are created. This provides rapid feedback on code changes, allowing us to catch errors early and fix them before they reach production. This in turn reduces manual effort and human error, as every change is thoroughly tested without requiring developer intervention. It also ensures consistent testing environments and accelerates the development workflow by integrating caching mechanisms for dependencies to improve efficiency.
 
 ### How we colllaborated
+
+To collaborate on the code that we individually worked on, we used PRs (pull requests) as a means to verify each other's code before it had been merged into the main branch. This process would start once somebody had pushed changes to their branch such that they had added implementation and the necessary tests. Once they had created a pull request on GitHub and added a relevant description to their PR, they would share this PR with the rest of the team via Slack, which is the primary messaging tool that we use at work.
+
+After the PR had completed the necessary checks, the person who made the PR would merge their branch into the `main` branch using GitHub's `Rebase and merge` button.
+
+![alt text](/public/resources/readme-assets/git-rebase-and-merge.png)
