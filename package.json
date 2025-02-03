@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --verbose --runInBand"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --verbose --runInBand --forceExit --detectOpenHandles"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
