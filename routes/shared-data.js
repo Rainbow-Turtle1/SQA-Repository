@@ -29,5 +29,4 @@ export function getCurrentLoggedInUser() {
 
 export function setCurrentLoggedInUser(user) {
   currentLoggedInUser = user;
-  console.log("Current logged in user: ", currentLoggedInUser);
 }

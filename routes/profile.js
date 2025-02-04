@@ -112,8 +112,10 @@ router.post("/profile/change-password", async (req, res) => {
 router.post("/profile/edit", async (req, res) => {
   try {
     const { name, email } = req.body;
-    const mockUserEmail = "test@email.com"; //mocking a logged in user's email
-    const user = await User.findOne({ where: { email: mockUserEmail } }); // find the user that needs to be updated
+    const currentLoggedInUser = getCurrentLoggedInUser();
+    const user = await User.findOne({
+      where: { email: currentLoggedInUser.email },
+    });
 
     if (!name && !email) {
       return res.status(400).json({
@@ -128,10 +130,15 @@ router.post("/profile/edit", async (req, res) => {
         { name },
         {
           where: {
-            email: mockUserEmail,
-          },
+            email: currentLoggedInUser.email,
+          }, // need to fix
         }
       );
+      setCurrentLoggedInUser({
+        ...currentLoggedInUser,
+        name,
+        email: currentLoggedInUser.email,
+      });
     } else if (email && name === "") {
       const checkAgainstDBUser = await User.findOne({ where: { email } });
       if (checkAgainstDBUser && checkAgainstDBUser.email !== user.email) {
@@ -146,10 +153,15 @@ router.post("/profile/edit", async (req, res) => {
         { email },
         {
           where: {
-            email: mockUserEmail,
-          },
+            email: currentLoggedInUser.email,
+          }, // need to fix
         }
       );
+      setCurrentLoggedInUser({
+        ...currentLoggedInUser,
+        email,
+        name: currentLoggedInUser.name,
+      });
     } else if (name && email) {
       const checkAgainstDBUser = await User.findOne({ where: { email } });
       if (checkAgainstDBUser && checkAgainstDBUser.email !== user.email) {
@@ -158,15 +170,17 @@ router.post("/profile/edit", async (req, res) => {
           message: "Email already exists.",
           redirectUrl: "/profile/edit",
         });
+      } else {
+        User.update(
+          { name, email },
+          {
+            where: {
+              email: currentLoggedInUser.email,
+            },
+          }
+        );
+        setCurrentLoggedInUser({ ...currentLoggedInUser, name, email });
       }
-      User.update(
-        { name, email },
-        {
-          where: {
-            email: mockUserEmail,
-          },
-        }
-      );
     }
 
     return res.status(200).json({
