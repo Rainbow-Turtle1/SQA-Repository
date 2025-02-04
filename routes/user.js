@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/user.js";
 import validator from "validator";
 import { NewSessionToken } from "./session-tokens.js";
+import { setCurrentLoggedInUser } from "./shared-data.js";
 
 const router = Router();
 
@@ -70,7 +71,11 @@ router.post("/register", async (req, res) => {
 
     // Hash password and store user
     const hash = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hash });
+    const uuid = uuidv4();
+    await User.create({ uuid, name, email, password: hash });
+    NewSessionToken(req, uuid);
+    const user = await User.findOne({ where: { uuid } });
+    setCurrentLoggedInUser(user);
 
     return res.status(200).json({
       success: true,
@@ -138,6 +143,12 @@ router.post("/login", async (req, res) => {
       });
     }
     NewSessionToken(req, user.id); // create and store session token
+
+    // Successful login
+    NewSessionToken(req, user.uuid);
+    let uuid = user.uuid;
+    const successfulUser = await User.findOne({ where: { uuid } });
+    setCurrentLoggedInUser({ ...successfulUser.dataValues });
 
     return res.status(200).json({
       success: true,

@@ -6,46 +6,46 @@ import {
   getAccountProfilePicture,
   setAccountProfilePicture,
   profilePicturePaths,
+  getCurrentLoggedInUser,
+  setCurrentLoggedInUser,
 } from "./shared-data.js";
 
 let accountProfilePicture = getAccountProfilePicture();
 let currentProfilePicture = 0;
 
-const user = {
-  name: "John Smith",
-  email: "test@email.com",
-  password: "password123",
-};
-
 router.get("/profile", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/profile", {
     title: "Profile",
-    user: { user },
+    user: user,
     profilePicture: profilePicturePaths[accountProfilePicture],
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
 router.get("/profile/edit", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/edit-details", {
     title: "Edit Profile",
-    user: { user },
+    user: user,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
 router.get("/profile/change-password", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/change-password", {
     title: "Change Password",
-    user: { user },
+    user: user,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
 router.get("/profile/delete-account", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/delete-account", {
     title: "Delete Account",
-    user: { user },
+    user: user,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
@@ -228,6 +228,7 @@ router.post("/profile/delete-account", async (req, res) => {
 
 router.post("/profile", (req, res) => {
   const { action } = req.body;
+  const user = getCurrentLoggedInUser();
 
   if (action === "nextPicture") {
     currentProfilePicture < profilePicturePaths.length - 1
@@ -236,7 +237,7 @@ router.post("/profile", (req, res) => {
 
     res.render("user-profile/profile", {
       title: "Profile",
-      user: { user },
+      user: user,
       profilePicture: profilePicturePaths[currentProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
@@ -247,7 +248,7 @@ router.post("/profile", (req, res) => {
 
     res.render("user-profile/profile", {
       title: "Profile",
-      user: { user },
+      user: user,
       profilePicture: profilePicturePaths[currentProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
@@ -257,7 +258,7 @@ router.post("/profile", (req, res) => {
 
     res.render("user-profile/profile", {
       title: "Profile",
-      user: { user },
+      user: user,
       profilePicture: profilePicturePaths[accountProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
