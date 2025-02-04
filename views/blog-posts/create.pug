@@ -9,27 +9,27 @@ block content
 
   script.
     document.getElementById("createPostForm").addEventListener("submit", async (e) => {
-      e.preventDefault(); // Stop default form submission
+      e.preventDefault(); // Stop default form submission to help json work
 
       // Collect form values manually
       const title = document.querySelector("input[name='title']").value;
       const author = document.querySelector("input[name='author']").value;
       const content = document.querySelector("textarea[name='content']").value;
 
-      // Send data as JSON
+      // Send data as JSON (else wont work)
       const response = await fetch("/create", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Ensure Express can parse it
+          "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        body: JSON.stringify({ title, author, content }) // Convert form data to JSON
+        body: JSON.stringify({ title, author, content }) // Convert form data to JSON for checking
       });
 
       const data = await response.json();
       if (data.success) {
         window.location.href = data.redirectUrl; // Redirect to home page
       } else {
-        alert(data.message); // Show error if creation fails
+        alert(data.message); // Show error as alert if creation fails
       }
     });
