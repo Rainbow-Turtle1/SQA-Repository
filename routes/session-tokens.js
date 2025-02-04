@@ -5,7 +5,7 @@ function NewSessionToken(req, uuid) {
   }
 
   if (!uuid) {
-    console.error("UUID is missing for session token.");
+    console.error("UUID not found - session token failed to create");
     return;
   }
 
@@ -13,14 +13,18 @@ function NewSessionToken(req, uuid) {
     id: uuid,
     date: getCurrentDate(),
   };
-  console.log(`Session token created for user ${uuid} on ${getCurrentDate()}`);
+
+  console.log(
+    `Session token was created for user: ${uuid} with date: ${getCurrentDate()}`
+  );
 }
 
 function FetchSessionId(req) {
-  if (req.session.user && req.session.id && tokenIsValid(req)) {
+  if (req.session && req.session.user && tokenIsValid(req)) {
     return req.session.user.id;
   }
-  throw Error("Session token error not valid");
+  console.error("Session token error: user not authenticated.");
+  throw Error("Session token error: user not authenticated.");
 }
 
 function tokenIsValid(req) {
@@ -38,15 +42,16 @@ function tokenIsValid(req) {
     );
 
     if (typeof req.session.destroy === "function") {
-      req.session.destroy(); // ✅ Prevents errors if destroy is missing
+      req.session.destroy(); // Prevents errors if destroy is missing
     } else {
       console.warn("Session destroy method is not available.");
-      req.session.user = null; // Fallback: Manually clear user session
+      req.session.user = null; // Fallback: Manually clears user session
     }
 
     return false;
   }
 
+  console.log("token is valid");
   return true;
 }
 

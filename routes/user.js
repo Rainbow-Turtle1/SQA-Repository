@@ -2,6 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import { User } from "../models/user.js";
 import validator from "validator";
+import { NewSessionToken } from "./session-tokens.js";
 
 const router = Router();
 
@@ -21,12 +22,22 @@ router.post("/register", async (req, res) => {
     confirmPassword = confirmPassword.trim();
 
     // Validate inputs
-    if (validator.isEmpty(name) || validator.isEmpty(email) || validator.isEmpty(password)) {
-      return res.status(400).json({ success: false, message: "All fields are required to register." });
+    if (
+      validator.isEmpty(name) ||
+      validator.isEmpty(email) ||
+      validator.isEmpty(password)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required to register.",
+      });
     }
 
     if (!validator.isEmail(email)) {
-      return res.status(400).json({ success: false, message: "Your email is in an invalid format." });
+      return res.status(400).json({
+        success: false,
+        message: "Your email is in an invalid format.",
+      });
     }
 
     if (!validator.isLength(password, { min: 6 })) {
@@ -37,7 +48,10 @@ router.post("/register", async (req, res) => {
     }
 
     if (!validator.equals(password, confirmPassword)) {
-      return res.status(400).json({ success: false, message: "Your passwords do not match. Please retry." });
+      return res.status(400).json({
+        success: false,
+        message: "Your passwords do not match. Please retry.",
+      });
     }
 
     // Check if user already exists
@@ -60,7 +74,7 @@ router.post("/register", async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Registration successful. Redirecting to the home page...",
+      message: "Registration successful. Redirecting to the home page...", //may change this to redirect to login to ensure token is created
       redirectUrl: "/",
     });
   } catch (error) {
@@ -87,11 +101,17 @@ router.post("/login", async (req, res) => {
 
     // Validate inputs
     if (validator.isEmpty(email) || validator.isEmpty(password)) {
-      return res.status(400).json({ success: false, message: "All fields are required to log in." });
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required to log in.",
+      });
     }
 
     if (!validator.isEmail(email)) {
-      return res.status(400).json({ success: false, message: "Your email is in an invalid format." });
+      return res.status(400).json({
+        success: false,
+        message: "Your email is in an invalid format.",
+      });
     }
 
     // Find user
@@ -117,6 +137,7 @@ router.post("/login", async (req, res) => {
         message: "Incorrect password. Please try again.",
       });
     }
+    NewSessionToken(req, user.id); // create and store session token
 
     return res.status(200).json({
       success: true,

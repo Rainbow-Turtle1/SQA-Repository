@@ -7,6 +7,7 @@ import {
   profilePicturePaths,
 } from "./shared-data.js";
 import { tokenIsValid, FetchSessionId } from "./session-tokens.js";
+//import { CONSTRAINT } from "sqlite3";
 
 let accountProfilePicture;
 
@@ -62,20 +63,25 @@ router.get("/create", (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
+    console.log("check if user is logged in"); //  console message to help debugging
+
     if (!tokenIsValid(req)) {
       return res.status(401).json({
         success: false,
-        message:
-          "unauthorised session token is invalid user may not be logged in",
+        message: "UNAUTHORIZED: SESSION TOKEN IS INVALID OR MISSING",
       });
     }
+    console.log("Session token was validated successfully"); // console message to help debigging
     const userSigniture = FetchSessionId(req);
+
     if (!userSigniture) {
+      console.error("ERR - failed to retrueve the UUID from the sessiontoken");
       return res.status(401).json({
         success: false,
-        message: "sessiontoken uuid not present user is likely not logged in",
+        message: "UNAUTHORIZED: SESSION TOKEN UUID NOT FOUND",
       });
     }
+    console.log(`Creating a post with signiture: ${userSigniture}`);
     const newPost = await BlogPost.create({
       title: req.body.title,
       content: req.body.content,
@@ -86,6 +92,7 @@ router.post("/create", async (req, res) => {
       success: true,
       message: "Blog post created!",
       post: newPost,
+      redirectUrl: "/",
     });
   } catch (error) {
     console.error("Error creating blog post:", error);
@@ -93,7 +100,6 @@ router.post("/create", async (req, res) => {
       .status(500)
       .json({ success: false, message: "Failed to create blog post" });
   }
-  res.redirect("/");
 });
 
 router.get("/post/:id", async (req, res) => {
