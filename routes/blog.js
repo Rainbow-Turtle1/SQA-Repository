@@ -1,12 +1,12 @@
 import { Router } from "express";
 const router = Router();
 import { BlogPost } from "../models/index.js";
-import { Op, Sequelize } from "sequelize";
+import { Op, Sequelize, UUID } from "sequelize";
 import {
   getAccountProfilePicture,
   profilePicturePaths,
 } from "./shared-data.js";
-//import { tokenIsValid } from "./session-token.js";
+import { tokenIsValid, FetchSessionId } from "./session-tokens.js";
 
 let accountProfilePicture;
 
@@ -61,7 +61,38 @@ router.get("/create", (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-  await BlogPost.create(req.body);
+  try {
+    if (!tokenIsValid(req)) {
+      return res.status(401).json({
+        success: false,
+        message:
+          "unauthorised session token is invalid user may not be logged in",
+      });
+    }
+    const userSigniture = FetchSessionId(req);
+    if (!userSigniture) {
+      return res.status(401).json({
+        success: false,
+        message: "sessiontoken uuid not present user is likely not logged in",
+      });
+    }
+    const newPost = await BlogPost.create({
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.author,
+      signiture: userSigniture, // logged in uuid
+    });
+    res.status(201).json({
+      success: true,
+      message: "Blog post created!",
+      post: newPost,
+    });
+  } catch (error) {
+    console.error("Error creating blog post:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to create blog post" });
+  }
   res.redirect("/");
 });
 
@@ -80,9 +111,20 @@ router.get("/post/:id", async (req, res) => {
 });
 
 router.get("/edit/:id", async (req, res) => {
+  if (!tokenIsValid(req)) {
+    return res.status(401).send("Unauthorized");
+  }
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
   if (post) {
+    const currentUserId = FetchSessionId(req);
+    const postAuthor = post.signiture;
+
+    if (postAuthor != currentUserId) {
+      return res
+        .status(403)
+        .send("Forbidden: you can only edit your own posts");
+    }
     res.render("blog-posts/edit", {
       title: "Edit Post",
       post,

@@ -1,5 +1,6 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import { DataTypes } from "sequelize";
+import sequelize from "../config/database.js";
+//import { FetchSessionId, tokenIsValid } from "./session-tokens.js";
 
 const BlogPost = sequelize.define(
   "BlogPost",
@@ -14,6 +15,10 @@ const BlogPost = sequelize.define(
     },
     author: {
       type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    signiture: {
+      type: DataTypes.UUIDV4,
       allowNull: false,
     },
   },
