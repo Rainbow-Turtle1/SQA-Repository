@@ -200,8 +200,10 @@ router.post("/profile/edit", async (req, res) => {
 router.post("/profile/delete-account", async (req, res) => {
   try {
     const { password } = req.body;
-    const email = "test@email.com";
-    const user = await User.findOne({ where: { email } });
+    const currentLoggedInUser = getCurrentLoggedInUser();
+    const user = await User.findOne({
+      where: { email: currentLoggedInUser.email },
+    });
 
     if (!password) {
       return res.status(400).json({
@@ -228,7 +230,7 @@ router.post("/profile/delete-account", async (req, res) => {
       });
     }
 
-    await User.destroy({ where: { email } });
+    await User.destroy({ where: { email: currentLoggedInUser.email } });
 
     return res.status(200).json({
       success: true,

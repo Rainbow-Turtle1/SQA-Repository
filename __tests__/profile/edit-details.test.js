@@ -24,7 +24,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   setCurrentLoggedInUser({
     id: 1,
-    uuid: "35dcc9cf-7173-48a8-9e5c-e4c1b700bf2c",
+    uuid: "123e4567-e89b-12d3-a456-426614174000",
     name: "test",
     email: "test@email.com",
     password: "$2a$10$iWKkixNJOjBEIQqUxrbKN.UCpv40d/ELuVS8mPMNdxcZ/SWDVArGa",
