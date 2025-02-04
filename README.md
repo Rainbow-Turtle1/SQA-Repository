@@ -122,6 +122,47 @@ By using hashing with salting, we've significantly enhanced our password securit
 ### CSRF Protection
 
 ### Input Validation
+**Input Sanitisation**
+We sanitise inputs by using the [validator library](https://www.npmjs.com/package/validator) to ensure that the inputs are well-formed. For example, we check if the email follows a valid format and if passwords are long enough. This ensures that malicious or unexpected input, such as special characters that might be used for injection (e.g., `--` `;` ` ` ), doesn't get submitted in the first place.
+
+For example, the validation checks that:
+
+```javascript
+if (!validator.isEmail(email)) {
+  return res.status(400).json({ success: false, message: "Invalid email format." });
+}
+```
+
+If an attacker tries to input something like `DROP TABLE users;`, this won't pass the `isEmail()` validation check and will be rejected.
+
+### CSRF Protection
+
+### Safeguards against XSS
+
+### Safeguards against SQL injection
+While Sequelize's ORM handles SQL injection prevention automatically, we further strengthened the app's security through different methods.
+
+**Trim Input Values**
+We trim the input values (e.g., `name.trim()`, `email.trim()`), which helps remove leading and trailing spaces. This reduces the risk of injecting characters that could be used for SQL injection
+
+**Limit the amount of data being retrieved from the database**
+We added an attributes option in the Sequelize queries to limit the amount of data being retrieved from the database.
+
+When querying a database using Sequelize, by default, all fields of the matching records are returned unless you specify otherwise. Since most of the time, we only need specific fields (e.g., id, password), we now request only the necessary fields using the attributes option. This helps reduce the amount of data being transferred from the database and can improve performance, especially when dealing with large tables.
+For example, when checking if an email is already registered, we only need the id to know whether the user exists or not.
+
+```javascript
+const existingUser = await User.findOne({
+  where: { email },
+  attributes: ["id"], 
+});
+```
+
+By limiting the fields retrieved to just what's necessary (id, password), we reduce the amount of data fetched from the database, improving performance.
+
+Restricting the data selected prevents unnecessary exposure of sensitive information. For example, we don't need to retrieve the user's name or email when we're just checking if a user exists or verifying their password.
+
+
 
 ### Any additional configurations or tools used
 
