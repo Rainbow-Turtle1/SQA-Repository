@@ -132,24 +132,6 @@ describe("POST /register happy cases", () => {
       })
     );
   });
-
-  //     name: "Isabella",
-  //     email: "Isabella@email.com",
-  //     password: "123456",
-  //     confirmPassword: "123456",
-  //   });
-  //   const res = mockResponse();
-
-  //   await UserRoutes.stack
-  //     .find((r) => r.route.path === "/register" && r.route.methods.post)
-  //     .route.stack[0].handle(req, res);
-  //   const user = await User.findOne({
-  //     where: { email: "Isabella@email.com" },
-  //   });
-  //   expect(user).not.toBeNull();
-  //   expect(user.uuid).not.toBeNull();
-  //   expect(await bcrypt.compare("123456", user.password)).toBe(true);
-  // });
 });
 
 describe("POST /register error cases", () => {
