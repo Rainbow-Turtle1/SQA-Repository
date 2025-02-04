@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import { BlogPost } from "../models/index.js";
-import { Op, Sequelize, UUID } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import {
   getAccountProfilePicture,
   profilePicturePaths,
