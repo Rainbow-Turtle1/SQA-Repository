@@ -4,6 +4,7 @@ import { User } from "../models/user.js";
 import validator from "validator";
 import { NewSessionToken } from "./session-tokens.js";
 import { setCurrentLoggedInUser } from "./shared-data.js";
+import { v4 as uuidv4 } from "uuid";
 
 const router = Router();
 

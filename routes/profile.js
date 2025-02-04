@@ -53,8 +53,10 @@ router.get("/profile/delete-account", (req, res) => {
 router.post("/profile/change-password", async (req, res) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
-    const email = "test@email.com";
-    const user = await User.findOne({ where: { email } });
+    const currentLoggedInUser = getCurrentLoggedInUser();
+    const user = await User.findOne({
+      where: { email: currentLoggedInUser.email },
+    });
 
     if (!oldPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({
@@ -94,7 +96,10 @@ router.post("/profile/change-password", async (req, res) => {
     }
 
     const newHash = await bcrypt.hash(newPassword, 10);
-    await User.update({ password: newHash }, { where: { email } });
+    await User.update(
+      { password: newHash },
+      { where: { email: currentLoggedInUser.email } }
+    );
 
     res.status(200).json({
       success: true,
