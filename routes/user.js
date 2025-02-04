@@ -74,8 +74,8 @@ router.post("/register", async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Registration successful. Redirecting to the home page...", //may change this to redirect to login to ensure token is created
-      redirectUrl: "/",
+      message: "Registration successful. Please login with your new account", // changed this to redirect to login to ensure token is created and user is validated
+      redirectUrl: "/login",
     });
   } catch (error) {
     console.error("Error during registration:", error);
