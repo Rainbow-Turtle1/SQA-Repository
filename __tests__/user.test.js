@@ -3,7 +3,6 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import { sequelize, User } from "../models/user.js";
 import UserRoutes from "../routes/user.js";
-import request from "supertest";
 import app from "../app.js";
 import "jest-localstorage-mock";
 import { v4 as uuidv4 } from "uuid";
@@ -49,9 +48,16 @@ function mockResponse() {
 // GET Routes
 describe("GET /register", () => {
   it("should render the register page", async () => {
-    const res = await request(app).get("/register");
-    expect(res.statusCode).toBe(200);
-    expect(res.text).toContain("Register"); // Check if Register page is loaded
+    const req = mockRequest();
+    const res = mockResponse();
+
+    await UserRoutes.stack
+      .find((r) => r.route.path === "/register" && r.route.methods.get)
+      .route.stack[0].handle(req, res);
+
+    expect(res.render).toHaveBeenCalledWith("user-profile/register", {
+      title: "Register",
+    });
   });
 });
 
