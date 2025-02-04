@@ -6,7 +6,7 @@ import {
   getAccountProfilePicture,
   profilePicturePaths,
 } from "./shared-data.js";
-import { tokenIsValid } from "./session-token.js";
+//import { tokenIsValid } from "./session-token.js";
 
 let accountProfilePicture;
 
