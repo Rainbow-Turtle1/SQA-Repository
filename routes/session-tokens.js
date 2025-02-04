@@ -16,6 +16,13 @@ function NewSessionToken(req, uuid) {
   console.log(`Session token created for user ${uuid} on ${getCurrentDate()}`);
 }
 
+function FetchSessionId(req) {
+  if (req.session.user && req.session.id && tokenIsValid(req)) {
+    return req.session.user.id;
+  }
+  throw Error("Session token error not valid");
+}
+
 function tokenIsValid(req) {
   if (!req.session || !req.session.user) {
     console.error("No session token found. User may not be logged in.");
@@ -50,4 +57,4 @@ function getCurrentDate() {
   return `${date.getFullYear()}${month}${day}`;
 }
 
-export { NewSessionToken, tokenIsValid };
+export { NewSessionToken, tokenIsValid, FetchSessionId };
