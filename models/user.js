@@ -4,7 +4,7 @@ import sequelize from "../config/database.js";
 const User = sequelize.define("User", {
   uuid: {
     type: DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4, // ✅ Correct way
+    defaultValue: Sequelize.UUIDV4, // Correct way
     allowNull: false,
     unique: true,
   },
