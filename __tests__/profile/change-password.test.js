@@ -58,6 +58,18 @@ describe("POST /profile/change-password", () => {
 
     expect(response.status).toBe(400);
   });
+  it("should return 400 if old password is incorrect", async () => {
+    const response = await request(app)
+      .post("/profile/change-password")
+      .type("form")
+      .send({
+        oldPassword: "test1233",
+        newPassword: "test246",
+        confirmPassword: "test246",
+      });
+
+    expect(response.status).toBe(400);
+  });
 
   it("should return 400 if fields are missing", async () => {
     const response = await request(app)
@@ -105,6 +117,12 @@ describe("POST /profile/change-password", () => {
       .post("/profile/change-password")
       .type("form")
       .send({});
+
+    expect(response.status).toBe(400);
+  });
+
+  it("should return 400 if the response is empty", async () => {
+    const response = await request(app).post("/profile/change-password").send();
 
     expect(response.status).toBe(400);
   });

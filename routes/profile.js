@@ -109,7 +109,7 @@ router.post("/profile/change-password", async (req, res) => {
       redirectUrl: "/profile",
     });
   } catch {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: "Error changing password.",
     });
@@ -138,7 +138,7 @@ router.post("/profile/edit", async (req, res) => {
         {
           where: {
             email: currentLoggedInUser.email,
-          }, // need to fix
+          },
         }
       );
       setCurrentLoggedInUser({

@@ -17,33 +17,7 @@ afterAll(async () => {
   await sequelize.close();
 });
 
-describe("GET /", () => {
-  it("should return 200 OK", async () => {
-    const response = await request(app).get("/").timeout({ deadline: 2000 });
-
-    expect(response.status).toBe(200);
-  });
-  it("should return the home page", async () => {
-    const response = await request(app).get("/");
-
-    expect(response.text).toContain("Blog with Express");
-    expect(response.text).toContain("+ Create Post");
-    expect(response.text).toContain("Post Stats");
-    expect(response.text).toContain("Login");
-    expect(response.text).toContain("Register");
-    expect(response.text).toContain(
-      '<img class="profile-icon" src="resources/profile-images/grey-profile-icon.png" alt="Profile Picture">'
-    );
-  });
-  it("should return the 404 page", async () => {
-    const response = await request(app).get("/undefined-route");
-
-    expect(response.status).toBe(404);
-    expect(response.text).toContain("Error");
-  });
-});
-
-describe("Blog Routes", () => {
+describe("GET Blog Routes", () => {
   beforeAll(async () => {
     // Sync the database and create some test data
     await BlogPost.sync({ force: true });
@@ -71,6 +45,29 @@ describe("Blog Routes", () => {
   });
 
   describe("GET /", () => {
+    it("should return 200 OK", async () => {
+      const response = await request(app).get("/").timeout({ deadline: 2000 });
+
+      expect(response.status).toBe(200);
+    });
+    it("should return the home page", async () => {
+      const response = await request(app).get("/");
+
+      expect(response.text).toContain("Blog with Express");
+      expect(response.text).toContain("+ Create Post");
+      expect(response.text).toContain("Post Stats");
+      expect(response.text).toContain("Login");
+      expect(response.text).toContain("Register");
+      expect(response.text).toContain(
+        '<img class="profile-icon" src="resources/profile-images/grey-profile-icon.png" alt="Profile Picture">'
+      );
+    });
+    it("should return the 404 page", async () => {
+      const response = await request(app).get("/undefined-route");
+
+      expect(response.status).toBe(404);
+      expect(response.text).toContain("Error");
+    });
     it("should return all posts sorted by created_at DESC by default", async () => {
       const response = await request(app).get("/");
       expect(response.status).toBe(200);
@@ -204,6 +201,162 @@ describe("Blog Routes", () => {
     it("should return 401 if user not logged in", async () => {
       const response = await request(app).get("/post/1");
       expect(response.status).toBe(401);
+    });
+  });
+
+  describe("GET /create", () => {
+    it("should return 200 OK", async () => {
+      const response = await request(app).get("/create");
+      expect(response.status).toBe(200);
+    });
+    it("should return the create post page", async () => {
+      const response = await request(app).get("/create");
+      expect(response.text).toContain("Create Post");
+      expect(response.text).toContain("Title");
+      expect(response.text).toContain("Author");
+      expect(response.text).toContain("Content");
+      expect(response.text).toContain("Create Post");
+    });
+  });
+
+  describe("GET /stats", () => {
+    it("should return 200 OK", async () => {
+      const response = await request(app).get("/stats");
+      expect(response.status).toBe(200);
+    });
+  });
+
+  describe("GET /post/:id", () => {
+    it("should return 200 OK", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      const response = await request(app).get(`/post/${post.id}`);
+      expect(response.status).toBe(200);
+    });
+
+    it("should return a post page", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      const response = await request(app).get(`/post/${post.id}`);
+      expect(response.text).toContain(`${post.title}`);
+      expect(response.text).toContain(`${post.content}`);
+      expect(response.text).toContain(`${post.author}`);
+    });
+  });
+
+  describe("GET /edit/:id", () => {
+    it("should return 200 OK", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      console.log("post:", post);
+      const response = await request(app).get(`/edit/${post.id}`);
+      expect(response.status).toBe(200);
+    });
+
+    it("should return an edit page", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      const response = await request(app).get(`/edit/${post.id}`);
+      expect(response.text).toContain(`${post.title}`);
+      expect(response.text).toContain(`${post.content}`);
+      expect(response.text).toContain("Save Changes");
+      expect(response.text).toContain("Delete Post");
+    });
+
+    it("should return 404 not found if it can't find a post", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      console.log("post:", post);
+      const response = await request(app).get(`/edit/${post.id + 72}`);
+      expect(response.status).toBe(404);
+    });
+  });
+});
+
+describe("POST Blog Routes", () => {
+  beforeAll(async () => {
+    // Sync the database and create some test data
+    await BlogPost.sync({ force: true });
+    await BlogPost.bulkCreate([
+      {
+        title: "new",
+        author: "new",
+        content: "Content of new post",
+        created_at: new Date("2023-01-02"),
+      },
+      {
+        title: "old",
+        author: "old",
+        content: "Content of old post",
+        created_at: new Date("2023-01-01"),
+      },
+    ]);
+  });
+
+  afterAll(async () => {
+    // Clean up the database
+    await BlogPost.destroy({ where: {}, truncate: true });
+  });
+
+  describe("POST /create", () => {
+    it("should return 302 and create a new post", async () => {
+      const response = await request(app).post("/create").type("form").send({
+        title: "Test Post",
+        author: "Tester",
+        content: "This is a test post",
+      });
+
+      expect(response.status).toBe(302);
+    });
+  });
+
+  describe("POST /edit/:id", () => {
+    it("should return 302 and edit a post", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      const response = await request(app)
+        .post(`/edit/${post.id}`)
+        .type("form")
+        .send({
+          title: "new",
+          content: "The contents of this post have been edited",
+        });
+
+      expect(response.status).toBe(302);
+    });
+
+    it("should return 404 if a post can't be found", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      const response = await request(app)
+        .post(`/edit/${post.id + 9999}`)
+        .type("form")
+        .send({
+          title: "new",
+          content: "The contents of this post have been edited",
+        });
+
+      expect(response.status).toBe(404);
+    });
+  });
+
+  describe("POST /delete/:id", () => {
+    it("should return 302 and delete a post", async () => {
+      const post = await BlogPost.findOne({ where: { title: "new" } });
+
+      const response = await request(app).post(`/delete/${post.id}`).send();
+
+      expect(response.status).toBe(302);
+    });
+
+    it("should return 404 if a post can't be found", async () => {
+      const post = await BlogPost.findOne({ where: { title: "old" } });
+
+      const response = await request(app)
+        .post(`/delete/${post.id + 9999}`)
+        .send();
+
+      expect(response.status).toBe(404);
     });
   });
 });

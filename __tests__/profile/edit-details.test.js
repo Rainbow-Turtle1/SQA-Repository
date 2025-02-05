@@ -107,7 +107,4 @@ describe("POST /profile/edit and test edit details functionality", () => {
       });
     expect(response.status).toBe(400);
   });
-  it("should return 400 if the user tries to change their email to an invalid one", async () => {
-    // requires session tokens to test
-  });
 });

@@ -73,4 +73,17 @@ describe("POST /profile and test profile picture functionality", () => {
     let updatedProfilePicture = getAccountProfilePicture();
     expect(updatedProfilePicture).toBe(currentProfilePicture - 1);
   });
+
+  it("should return 400 if the profile picture isn't changed properly", async () => {
+    const currentProfilePicture = getAccountProfilePicture();
+
+    const response = await request(app)
+      .post("/profile")
+      .type("form")
+      .send({ action: "allThePictures" });
+
+    let updatedProfilePicture = getAccountProfilePicture();
+    expect(updatedProfilePicture).toBe(currentProfilePicture);
+    expect(response.status).toBe(400);
+  });
 });
