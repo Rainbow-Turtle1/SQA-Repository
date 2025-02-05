@@ -15,10 +15,14 @@ html(lang="en")
           li
             a.navbar-button(href="/stats") Post Stats
       .navbar-account
-        .navbar-account-button
-          a.login-button(href="/login") Login
-          div /
-          a.register-button(href="/register") Register
+        if user && Object.keys(user).length > 0
+          .navbar-account-button
+            span <strong> Welcome, #{user.name}! </strong>
+        else
+          .navbar-account-button
+            a.login-button(href="/login") Login
+            div /
+            a.register-button(href="/register") Register
         a(href="/profile")
           img(class="profile-icon", src=profileIcon, alt='Profile Picture')
     main

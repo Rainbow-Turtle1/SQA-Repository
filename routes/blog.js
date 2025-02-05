@@ -5,6 +5,7 @@ import { Op, Sequelize } from "sequelize";
 import {
   getAccountProfilePicture,
   profilePicturePaths,
+  getCurrentLoggedInUser,
 } from "./shared-data.js";
 import { tokenIsValid, FetchSessionId } from "./session-tokens.js";
 
@@ -42,6 +43,7 @@ router.get("/", async (req, res) => {
   const posts = await BlogPost.findAll({ where: query, order: sortOption });
 
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   res.render("blog-posts/index", {
     title: "Blog Posts",
     posts,
@@ -49,14 +51,17 @@ router.get("/", async (req, res) => {
     sort,
     noPostsFound: posts.length === 0,
     profileIcon: profilePicturePaths[accountProfilePicture],
+    user: user,
   });
 });
 
 router.get("/create", (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   res.render("blog-posts/create", {
     title: "Create Post",
     profileIcon: profilePicturePaths[accountProfilePicture],
+    user: user,
   });
 });
 
@@ -107,6 +112,7 @@ router.get("/post/:id", async (req, res) => {
   }
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   if (post) {
     const currentUserId = FetchSessionId(req);
     const postAuthor = post.signature;
@@ -118,6 +124,7 @@ router.get("/post/:id", async (req, res) => {
       post,
       edit: postAuthor === currentUserId,
       profileIcon: profilePicturePaths[accountProfilePicture],
+      user: user,
     });
   } else {
     res.status(404).send("Post not found");
@@ -130,6 +137,7 @@ router.get("/edit/:id", async (req, res) => {
   }
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   if (post) {
     const currentUserId = FetchSessionId(req);
     const postAuthor = post.signature;
@@ -143,6 +151,7 @@ router.get("/edit/:id", async (req, res) => {
       title: "Edit Post",
       post,
       profileIcon: profilePicturePaths[accountProfilePicture],
+      user: user,
     });
   } else {
     res.status(404).send("Post not found");
@@ -171,6 +180,7 @@ router.post("/delete/:id", async (req, res) => {
 
 router.get("/stats", async (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   const posts = await BlogPost.findAll();
   const lengths = posts.map((post) => post.title.length + post.content.length);
   const stats = {
@@ -186,6 +196,7 @@ router.get("/stats", async (req, res) => {
     title: "Post Statistics",
     ...stats,
     profileIcon: profilePicturePaths[accountProfilePicture],
+    user: user,
   });
 });
 

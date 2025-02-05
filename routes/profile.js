@@ -20,6 +20,8 @@ router.get("/profile", (req, res) => {
     user: user,
     profilePicture: profilePicturePaths[accountProfilePicture],
     profileIcon: profilePicturePaths[accountProfilePicture],
+    // add functionality so that if the user is logged in, it will say welcome back,
+    // if not, it will show login/register
   });
 });
 
