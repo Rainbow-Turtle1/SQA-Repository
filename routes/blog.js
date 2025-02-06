@@ -7,7 +7,6 @@ import {
   profilePicturePaths,
 } from "./shared-data.js";
 import { tokenIsValid, FetchSessionId } from "./session-tokens.js";
-//import { CONSTRAINT } from "sqlite3";
 
 let accountProfilePicture;
 
