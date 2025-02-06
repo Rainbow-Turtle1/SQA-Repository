@@ -72,21 +72,21 @@ router.post("/create", async (req, res) => {
       });
     }
     console.log("Session token was validated successfully"); // console message to help debigging
-    const userSigniture = FetchSessionId(req);
+    const userSignature = FetchSessionId(req);
 
-    if (!userSigniture) {
+    if (!userSignature) {
       console.error("ERR - failed to retrueve the UUID from the sessiontoken");
       return res.status(401).json({
         success: false,
         message: "UNAUTHORIZED: SESSION TOKEN UUID NOT FOUND",
       });
     }
-    console.log(`Creating a post with signiture: ${userSigniture}`);
+    console.log(`Creating a post with signature: ${userSignature}`);
     const newPost = await BlogPost.create({
       title: req.body.title,
       content: req.body.content,
       author: req.body.author,
-      signiture: userSigniture, // logged in uuid
+      signature: userSignature, // logged in uuid
     });
     res.status(201).json({
       success: true,
@@ -110,10 +110,10 @@ router.get("/post/:id", async (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
   if (post) {
     const currentUserId = FetchSessionId(req);
-    const postAuthor = post.signiture;
+    const postAuthor = post.signature;
 
-    console.log("post: " + postAuthor)
-    console.log("current: " + currentUserId)
+    console.log("post: " + postAuthor);
+    console.log("current: " + currentUserId);
     res.render("blog-posts/post", {
       title: post.title,
       post,
@@ -133,7 +133,7 @@ router.get("/edit/:id", async (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
   if (post) {
     const currentUserId = FetchSessionId(req);
-    const postAuthor = post.signiture;
+    const postAuthor = post.signature;
 
     if (postAuthor !== currentUserId) {
       return res

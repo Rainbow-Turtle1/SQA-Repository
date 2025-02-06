@@ -52,14 +52,14 @@ describe("Blog Routes", () => {
         title: "new",
         author: "new",
         content: "Content of new post",
-        signiture: "33333333-3333-3333-3333-333333333333",
+        signature: "33333333-3333-3333-3333-333333333333",
         created_at: new Date("2023-01-02"),
       },
       {
         title: "old",
         author: "old",
         content: "Content of old post",
-        signiture: "33333333-3333-3333-3333-333333333333",
+        signature: "33333333-3333-3333-3333-333333333333",
         created_at: new Date("2023-01-01"),
       },
     ]);
@@ -131,14 +131,14 @@ describe("Blog Routes", () => {
           title: "old2",
           author: "old",
           content: "Content of new post",
-          signiture: "33333333-3333-3333-3333-333333333333",
+          signature: "33333333-3333-3333-3333-333333333333",
           created_at: new Date("2023-01-02"),
         },
         {
           title: "old3",
           author: "old",
           content: "Content of newer post",
-          signiture: "33333333-3333-3333-3333-333333333333",
+          signature: "33333333-3333-3333-3333-333333333333",
           created_at: new Date("2023-01-03"),
         },
       ]);
@@ -165,14 +165,14 @@ describe("Blog Routes", () => {
           title: "old2",
           author: "old",
           content: "Content of new post",
-          signiture: "33333333-3333-3333-3333-333333333333", // Mock UUID
+          signature: "33333333-3333-3333-3333-333333333333", // Mock UUID
           created_at: new Date("2023-01-02"),
         },
         {
           title: "old3",
           author: "old",
           content: "Content of newer post",
-          signiture: "33333333-3333-3333-3333-333333333333", // Mock UUID
+          signature: "33333333-3333-3333-3333-333333333333", // Mock UUID
           created_at: new Date("2023-01-03"),
         },
       ]);

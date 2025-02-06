@@ -17,7 +17,7 @@ const BlogPost = sequelize.define(
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    signiture: {
+    signature: {
       type: DataTypes.UUIDV4,
       allowNull: false,
     },
