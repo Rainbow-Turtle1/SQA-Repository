@@ -3,8 +3,6 @@ import { sequelize } from "../models";
 import express from "express";
 import blogRoutes from "../routes/blog.js";
 import { BlogPost } from "../models/index.js";
-import { User } from "../models/user.js"; // Import User model for test user
-import bcrypt from "bcryptjs"; // bcrypt for password hashing for test user
 
 const app = express();
 app.set("view engine", "pug");
