@@ -107,22 +107,22 @@ router.post("/create", async (req, res) => {
 });
 
 router.get("/post/:id", async (req, res) => {
-  if (!tokenIsValid(req)) {
-    return res.status(401).send("Unauthorized");
-  }
+  // if (!tokenIsValid(req)) {
+  //   return res.status(401).send("Unauthorized");
+  // }
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
   const user = getCurrentLoggedInUser();
   if (post) {
     const currentUserId = FetchSessionId(req);
-    const postAuthor = post.signature;
+    const postSignature = post.signature;
 
-    console.log("post: " + postAuthor);
+    console.log("post signature: " + postSignature);
     console.log("current: " + currentUserId);
     res.render("blog-posts/post", {
       title: post.title,
       post,
-      edit: postAuthor === currentUserId,
+      canEdit: postSignature === currentUserId,
       profileIcon: profilePicturePaths[accountProfilePicture],
       user: user,
     });
@@ -140,9 +140,9 @@ router.get("/edit/:id", async (req, res) => {
   const user = getCurrentLoggedInUser();
   if (post) {
     const currentUserId = FetchSessionId(req);
-    const postAuthor = post.signature;
+    const postSignature = post.signature;
 
-    if (postAuthor !== currentUserId) {
+    if (postSignature !== currentUserId) {
       return res
         .status(403)
         .send("Forbidden: you can only edit your own posts");

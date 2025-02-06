@@ -210,10 +210,10 @@ describe("GET Blog Routes", () => {
       expect(response.text).not.toContain("new by new");
     });
 
-    it("should return 401 if user not logged in", async () => {
-      const response = await request(app).get("/post/1");
-      expect(response.status).toBe(401);
-    });
+    // it("should return 401 if user not logged in", async () => {
+    //   const response = await request(app).get("/post/1");
+    //   expect(response.status).toBe(401);
+    // });
   });
 
   describe("GET /create", () => {
