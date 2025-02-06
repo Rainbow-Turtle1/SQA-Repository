@@ -104,7 +104,7 @@ describe("POST /register happy cases", () => {
       email: "isabella@email.com",
       password: await bcrypt.hash("123456", 10),
     });
-  
+
     const req = mockRequest({
       name: "Isabella",
       email: "isabella@email.com",
@@ -112,17 +112,17 @@ describe("POST /register happy cases", () => {
       confirmPassword: "123456",
     });
     const res = mockResponse();
-  
+
     await UserRoutes.stack
       .find((r) => r.route.path === "/register" && r.route.methods.post)
       .route.stack[0].handle(req, res);
-  
+
     const user = await User.findOne({ where: { email: "isabella@email.com" } });
-  
+
     expect(user).not.toBeNull();
-    expect(user.id).not.toBeNull(); 
+    expect(user.id).not.toBeNull();
     expect(await bcrypt.compare("123456", user.password)).toBe(true);
-  
+
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -216,7 +216,6 @@ describe("POST /register error cases", () => {
       message: "Your email is in an invalid format.",
     });
   });
-  
 });
 
 describe("POST /login happy paths", () => {
@@ -371,9 +370,8 @@ describe("POST /login error cases", () => {
 //this test has to be run last because it is affecting other tests
 describe("POST /register error case", () => {
   it("should return an error if there is a server error", async () => {
-
     jest.spyOn(User, "create").mockRejectedValue(new Error("Database error"));
-  
+
     const req = mockRequest({
       name: "Isabella",
       email: "isabella@email.com",
@@ -381,11 +379,11 @@ describe("POST /register error case", () => {
       confirmPassword: "123456",
     });
     const res = mockResponse();
-  
+
     await UserRoutes.stack
       .find((r) => r.route.path === "/register" && r.route.methods.post)
       .route.stack[0].handle(req, res);
-  
+
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -393,7 +391,7 @@ describe("POST /register error case", () => {
         message: "An error occurred. Please try again.",
       })
     );
-  
+
     User.create.mockRestore();
   });
 });

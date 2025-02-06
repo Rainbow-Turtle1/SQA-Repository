@@ -11,6 +11,18 @@ app.use("/", blogRoutes);
 
 beforeAll(async () => {
   await sequelize.sync({ force: true });
+
+  await request(app).post("/register").type("form").send({
+    name: "Nathan",
+    email: "nathan@email.com",
+    password: "123456",
+    confirmPassword: "123456",
+  });
+
+  await request(app).post("/login").type("form").send({
+    email: "nathan@email.com",
+    password: "123456",
+  });
 });
 
 afterAll(async () => {
@@ -263,12 +275,12 @@ describe("GET Blog Routes", () => {
       expect(response.text).toContain("Delete Post");
     });
 
-    it("should return 404 not found if it can't find a post", async () => {
+    it("should return 401 not found if it can't find a post", async () => {
       const post = await BlogPost.findOne({ where: { title: "new" } });
 
       console.log("post:", post);
       const response = await request(app).get(`/edit/${post.id + 72}`);
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(401);
     });
   });
 });
@@ -282,12 +294,14 @@ describe("POST Blog Routes", () => {
         title: "new",
         author: "new",
         content: "Content of new post",
+        signature: "33333333-3333-3333-3333-333333333333",
         created_at: new Date("2023-01-02"),
       },
       {
         title: "old",
         author: "old",
         content: "Content of old post",
+        signature: "33333333-3333-3333-3333-333333333333",
         created_at: new Date("2023-01-01"),
       },
     ]);
