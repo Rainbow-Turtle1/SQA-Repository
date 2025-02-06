@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
-//import { FetchSessionId, tokenIsValid } from "./session-tokens.js";
 
 const BlogPost = sequelize.define(
   "BlogPost",
