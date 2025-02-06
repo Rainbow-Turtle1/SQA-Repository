@@ -47,7 +47,7 @@ describe("POST /profile/edit and test edit details functionality", () => {
       where: { email: "test.name@email.com" },
     });
 
-    console.log("user:", user);
+    // consol.log("user:", user);
 
     expect(user.name).toBe("Test Name");
     expect(user.email).toBe("test.name@email.com");

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 $("#loginForm").on("submit", async function (e) {
-  e.preventDefault(); 
+  e.preventDefault();
   const formData = $(this).serialize();
 
   try {
@@ -13,17 +13,17 @@ $("#loginForm").on("submit", async function (e) {
     const result = await response.json();
 
     $("#responseMessage").text(result.message);
-    $("#responseModal").data("redirectUrl", result.redirectUrl || null); 
+    $("#responseModal").data("redirectUrl", result.redirectUrl || null);
     $("#responseModal").modal("show");
 
     $("#responseModal").on("hidden.bs.modal", function () {
       const redirectUrl = $("#responseModal").data("redirectUrl");
       if (redirectUrl) {
-        window.location.href = redirectUrl; 
+        window.location.href = redirectUrl;
       }
     });
   } catch (error) {
-    console.log("Error occured", error);
+    // consol.log("Error occured", error);
     $("#responseMessage").text("An error occurred. Please try again.");
     $("#responseModal").modal("show");
   }

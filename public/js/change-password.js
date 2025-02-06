@@ -23,7 +23,7 @@ $("#changePasswordForm").on("submit", async function (e) {
       }
     });
   } catch (error) {
-    console.log("Error occurred:", error);
+    // consol.log("Error occurred:", error);
     $("#responseMessage").text("An error occurred. Please try again.");
     $("#responseModal").modal("show");
   }

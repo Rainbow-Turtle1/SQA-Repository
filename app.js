@@ -66,7 +66,7 @@ app.use((req, res) => {
 // Sync database and start server
 sequelize.sync().then(() => {
   app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    // consol.log(`Server is running on http://localhost:${port}`);
   });
 });
 

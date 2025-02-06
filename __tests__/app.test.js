@@ -260,7 +260,7 @@ describe("GET Blog Routes", () => {
     it("should return 200 OK", async () => {
       const post = await BlogPost.findOne({ where: { title: "new" } });
 
-      console.log("post:", post);
+      // consol.log("post:", post);
       const response = await request(app).get(`/edit/${post.id}`);
       expect(response.status).toBe(200);
     });
@@ -278,7 +278,7 @@ describe("GET Blog Routes", () => {
     it("should return 401 not found if it can't find a post", async () => {
       const post = await BlogPost.findOne({ where: { title: "new" } });
 
-      console.log("post:", post);
+      // consol.log("post:", post);
       const response = await request(app).get(`/edit/${post.id + 72}`);
       expect(response.status).toBe(401);
     });
@@ -318,6 +318,7 @@ describe("POST Blog Routes", () => {
         title: "Test Post",
         author: "Tester",
         content: "This is a test post",
+        signature: "",
       });
 
       expect(response.status).toBe(302);

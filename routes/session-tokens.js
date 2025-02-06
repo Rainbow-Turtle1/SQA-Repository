@@ -14,9 +14,9 @@ function NewSessionToken(req, uuid) {
     date: getCurrentDate(),
   };
 
-  console.log(
-    `Session token was created for user: ${uuid} with date: ${getCurrentDate()}`
-  );
+  // consol.log(
+  //   `Session token was created for user: ${uuid} with date: ${getCurrentDate()}`
+  // );
 }
 
 function FetchSessionId(req) {
@@ -51,7 +51,7 @@ function tokenIsValid(req) {
     return false;
   }
 
-  console.log("token is valid");
+  // consol.log("token is valid");
   return true;
 }
 

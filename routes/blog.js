@@ -67,7 +67,7 @@ router.get("/create", (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    console.log("check if user is logged in"); //  console message to help debugging
+    // consol.log("check if user is logged in"); //  console message to help debugging
 
     if (!tokenIsValid(req)) {
       return res.status(401).json({
@@ -75,7 +75,7 @@ router.post("/create", async (req, res) => {
         message: "UNAUTHORIZED: SESSION TOKEN IS INVALID OR MISSING",
       });
     }
-    console.log("Session token was validated successfully"); // console message to help debigging
+    // consol.log("Session token was validated successfully"); // console message to help debigging
     const userSignature = FetchSessionId(req);
 
     if (!userSignature) {
@@ -85,7 +85,7 @@ router.post("/create", async (req, res) => {
         message: "UNAUTHORIZED: SESSION TOKEN UUID NOT FOUND",
       });
     }
-    console.log(`Creating a post with signature: ${userSignature}`);
+    // consol.log(`Creating a post with signature: ${userSignature}`);
     const newPost = await BlogPost.create({
       title: req.body.title,
       content: req.body.content,
@@ -117,8 +117,8 @@ router.get("/post/:id", async (req, res) => {
     const currentUserId = FetchSessionId(req);
     const postSignature = post.signature;
 
-    console.log("post signature: " + postSignature);
-    console.log("current: " + currentUserId);
+    // consol.log("post signature: " + postSignature);
+    // consol.log("current: " + currentUserId);
     res.render("blog-posts/post", {
       title: post.title,
       post,
