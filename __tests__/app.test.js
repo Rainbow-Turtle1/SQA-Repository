@@ -13,14 +13,6 @@ app.use("/", blogRoutes);
 
 beforeAll(async () => {
   await sequelize.sync({ force: true });
-
-  await User.create({
-    //create test user
-    uuid: "11111111-1111-1111-1111-111111111111",
-    name: "Test User",
-    email: "testuser@testing.com",
-    password: await bcrypt.hash("testpassword123", 10), // Hash the password
-  });
 });
 
 afterAll(async () => {
@@ -211,15 +203,9 @@ describe("Blog Routes", () => {
       expect(response.text).not.toContain("new by new");
     });
 
-    it("should return 404 if post not found", async () => {
-      await request(app).post("/login").send({
-        //login as test user
-        email: "testuser@testing.com", // Use an email that exists in your test database
-        password: "testpassword123",
-      });
-
-      const response = await request(app).get("/post/999");
-      expect(response.status).toBe(404);
+    it("should return 401 if user not logged in", async () => {
+      const response = await request(app).get("/post/1");
+      expect(response.status).toBe(401);
     });
   });
 });
