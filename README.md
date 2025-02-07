@@ -111,7 +111,6 @@ With this format, we validate both the HTTP response status and the presence of 
 ### Evidence of achieving the coverage report
 
 Attached is the test coverage report
-![alt text](image.png)
 ![alt text](/public/resources/readme-assets/test-coverage.png)
 
 ### How edge cases and error conditions were tested
