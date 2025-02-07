@@ -45,6 +45,30 @@ button {
   cursor: pointer;
 }
 
+.light-blue-button {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  background: #007bff; /* Light blue background */
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  margin: 0 8px; /* Adds spacing between buttons */
+  transition: background 0.3s ease-in-out;
+}
+
+.light-blue-button:hover {
+  background: #0056b3; /* Darker blue on hover */
+}
+
+.navbar-account-buttons {
+  display: flex;
+  gap: 10px; /* Adds spacing between buttons */
+  align-items: center; /* Vertically aligns buttons */
+}
+
 button:hover {
   background: #555555;
 }
@@ -57,112 +81,39 @@ button.danger:hover {
   background: #ff4747;
 }
 
+.logout-button {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  background: #333;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+}
+
+.logout-button:hover {
+  background: red;
+  color: white;
+}
+
 .image-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.image-selector {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.profile-picture {
-  width: 200px;
-  height: 200px;
-  border-style: solid;
-  border-width: 10px;
-  border-color: black;
-  border-radius: 50%;
-}
-
-.profile-picture-container,
-.profile-picture-container:hover {
-  background: white;
-  display: grid;
-  grid-template: 1fr / 1fr;
-  place-items: center;
-  z-index: 1;
-}
-
-.profile-picture-container > * {
-  grid-column: 1 / 1;
-  grid-row: 1 / 1;
-}
-
-.save-icon {
-  z-index: 2;
-  position: relative;
-  left: 75px;
-  top: 75px;
-  border: #000000;
-  border-width: 5px;
-  border-style: solid;
-  border-radius: 25px;
-  background-color: #aaaaaa;
-  font-size: 20px;
-}
-
 .profile-icon {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border-style: solid;
-  border-width: 3px;
   margin-right: 10px;
 }
 
 .profile-icon:hover {
   cursor: pointer;
-  -webkit-mask-image: linear-gradient(
-    -75deg,
-    rgba(236, 0, 0, 0.6) 30%,
-    #33ff00 50%,
-    rgba(43, 0, 255, 0.6) 70%
-  );
-  -webkit-mask-size: 200%;
-  animation: shine 2s infinite;
-}
-
-@-webkit-keyframes shine {
-  from {
-    -webkit-mask-position: 150%;
-  }
-
-  to {
-    -webkit-mask-position: -50%;
-  }
-}
-
-.details-container {
-  margin: 0;
-  padding-bottom: 20px;
-}
-
-.details {
-  font-size: 16px;
-}
-
-.change-credentials {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  padding-bottom: 20px;
-}
-
-.change-credentials-buttons {
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.delete-account {
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: bold;
 }
 
 .navbar {
@@ -191,140 +142,29 @@ button.danger:hover {
   background-color: #333;
 }
 
-.navbar-account-button {
-  text-align: center;
-  text-decoration: none;
-  color: #5c5c5c;
-  display: flex;
-  margin-right: 20px;
-}
-
-.login-button:hover,
-.register-button:hover {
-  color: black;
-}
-
 .navbar-account {
   display: flex;
   align-items: center;
-}
-
-.filter-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-}
-
-.filter-group {
-  display: flex;
-  align-items: center;
-}
-
-.filter-dropdown {
-  padding: 5px;
-  width: 130px;
-  height: 32px;
-  border-radius: 8px;
-  margin-left: 5px;
-  margin-right: 10px;
-}
-
-.filter-button {
-  border-radius: 8px;
-}
-
-.filter-label {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.search-bar {
-  align-items: center;
-  width: 400px;
-}
-
-.horizontal {
-  display: flex;
+  justify-content: flex-end;
   gap: 10px;
 }
 
-/* Modal Background */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-  transition: all 0.3s ease-in-out;
-  padding-top: 50px;
-}
-
-/* Modal Content */
-.modal-dialog {
-  position: relative;
-  margin: auto;
-  padding: 20px;
-  width: 80%;
-  max-width: 600px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  animation: modalopen 0.4s;
-  justify-content: center;
-}
-
-/* Modal Header */
-.modal-header {
+.navbar-account-button {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid #e5e5e5;
+  gap: 10px;
 }
 
-/* Modal Title */
-.modal-title {
-  margin: 0;
-  font-size: 1.5em;
-}
-
-/* Modal Close Button */
-.modal-header .close {
-  font-size: 1.5em;
-  cursor: pointer;
-}
-
-/* Modal Body */
-.modal-body {
-  padding: 20px;
-}
-
-/* Modal Footer */
-.modal-footer {
+.navbar-user-info {
   display: flex;
-  justify-content: flex-end;
-  padding: 10px 20px;
-  border-top: 1px solid #e5e5e5;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Animation for Modal */
-@keyframes modalopen {
-  from {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.form-control {
-  display: flex;
-  width: 30%;
+.navbar-user-info .welcome-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-right: 10px;
 }

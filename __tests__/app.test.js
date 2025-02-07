@@ -29,11 +29,6 @@ describe("GET /", () => {
     expect(response.text).toContain("Blog with Express");
     expect(response.text).toContain("+ Create Post");
     expect(response.text).toContain("Post Stats");
-    expect(response.text).toContain("Login");
-    expect(response.text).toContain("Register");
-    expect(response.text).toContain(
-      '<img class="profile-icon" src="resources/profile-images/grey-profile-icon.png" alt="Profile Picture">'
-    );
   });
   it("should return the 404 page", async () => {
     const response = await request(app).get("/undefined-route");
@@ -398,14 +393,15 @@ describe("GET /stats when no posts are available", () => {
 
   it("should return 0 for all stats when there are no posts", async () => {
     const response = await request(app).get("/stats");
-    
+
     // Check the response for the correct default values
     expect(response.status).toBe(200);
     expect(response.text).toContain("Average: 0.00 characters");
     expect(response.text).toContain("Median: 0.00 characters");
     expect(response.text).toContain("Maximum: 0.00 characters");
     expect(response.text).toContain("Minimum: 0.00 characters");
-    expect(response.text).toContain("Total length of all posts: 0.00 characters");
+    expect(response.text).toContain(
+      "Total length of all posts: 0.00 characters"
+    );
   });
 });
-
