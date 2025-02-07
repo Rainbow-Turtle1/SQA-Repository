@@ -31,10 +31,10 @@ describe("GET /", () => {
     expect(response.text).toContain("+ Create Post");
     expect(response.text).toContain("Post Stats");
 
-    // Check if login and register buttons exist for non-logged-in users
     expect(response.text).toContain(
       '<a class="login-button light-blue-button" href="/login">Login</a>'
     );
+
     expect(response.text).toContain(
       '<a class="register-button light-blue-button" href="/register">Register</a>'
     );
