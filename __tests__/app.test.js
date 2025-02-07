@@ -200,10 +200,30 @@ describe("Blog Routes", () => {
       expect(response.text).not.toContain("old by old");
       expect(response.text).not.toContain("new by new");
     });
+  });
 
-    it("should return 401 if user not logged in", async () => {
-      const response = await request(app).get("/post/1");
-      expect(response.status).toBe(401);
-    });
+  it("should return 401 if user not logged in", async () => {
+    const response = await request(app).get("/post/1");
+    expect(response.status).toBe(401);
   });
 });
+
+describe("GET /stats when no posts are available", () => {
+  beforeAll(async () => {
+    // Clear the BlogPost table to ensure no posts are available
+    await BlogPost.destroy({ where: {}, truncate: true });
+  });
+
+  it("should return 0 for all stats when there are no posts", async () => {
+    const response = await request(app).get("/stats");
+    
+    // Check the response for the correct default values
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Average: 0.00 characters");
+    expect(response.text).toContain("Median: 0.00 characters");
+    expect(response.text).toContain("Maximum: 0.00 characters");
+    expect(response.text).toContain("Minimum: 0.00 characters");
+    expect(response.text).toContain("Total length of all posts: 0.00 characters");
+  });
+});
+
