@@ -1,3 +1,5 @@
+import { clearLoggedInUser } from "./shared-data.js";
+
 function NewSessionToken(req, uuid) {
   if (!req.session) {
     console.error("Session object is undefined. Possible misconfiguration.");
@@ -22,18 +24,26 @@ function NewSessionToken(req, uuid) {
 function ClearSessionToken(req) {
   if (!req.session) {
     console.log(
-      "Session object is undefined. Possible misconfiguration. Session may already be clear"
+      "Session object is undefined. Possible misconfiguration. Session may already be clear."
     );
-    return res.redirect("/login");
+    return;
   }
 
+  req.session.user = {
+    id: null,
+    date: null,
+  };
+  clearLoggedInUser();
+
+  console.log("Cleared session token success.");
+
+  //  DEstroy the session
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
     } else {
-      console.log("Session successfully cleared.");
+      console.log("Session fully destroyed.");
     }
-    console.log("cleared session token");
   });
 }
 

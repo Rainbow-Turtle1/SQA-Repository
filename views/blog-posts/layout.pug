@@ -18,6 +18,7 @@ html(lang="en")
         if user && Object.keys(user).length > 0
           .navbar-account-button
             span <strong> Welcome, #{user.name}! </strong>
+            a.logout-button(href="/logout") Logout
         else
           .navbar-account-button
             a.login-button(href="/login") Login

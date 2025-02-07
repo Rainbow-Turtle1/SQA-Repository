@@ -30,3 +30,7 @@ export function getCurrentLoggedInUser() {
 export function setCurrentLoggedInUser(user) {
   currentLoggedInUser = user;
 }
+
+export function clearLoggedInUser() {
+  currentLoggedInUser = null;
+}
