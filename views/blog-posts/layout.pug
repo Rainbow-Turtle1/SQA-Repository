@@ -26,6 +26,8 @@ html(lang="en")
             a.login-button.light-blue-button(href="/login") Login
             div 
             a.register-button.light-blue-button(href="/register") Register
+            a(href="/profile")
+              img(class="profile-icon", src=profileIcon, alt='Profile Picture')
     main
       h1=title
       block content
