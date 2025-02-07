@@ -70,10 +70,4 @@ describe("POST /profile/delete-account", () => {
 
     expect(deleteAccountResponse.status).toBe(400);
   });
-  it("should return 400 if the user is not currently logged in", async () => {
-    // blank until session tokens are added
-  });
-  it("should return 400 if the password does not match the currently logged in user", async () => {
-    // blank until session tokens are added
-  });
 });
