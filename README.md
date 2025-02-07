@@ -71,7 +71,7 @@ We also added a user profile pages where users can change their profile picture,
 
 #### Session Tokens - **Arran McPherson**
 
-One of the challenges that we faced was the implementation of session tokens. [talk about the problem and what you did to fix it]
+One of the challenges that I faced was the implementation of session tokens as a whole. I originally thought that the implemention would be fairly simple and not take a significant time. However in the process of researching it realised there were a number of issue with my palns to implement it due to large secuirty issues and difficulty with persisting sessions. Some of these errors were likely due to misunderstandings of the how the actual functions I was using worked even after researching them. I read and watch many articles and videos in order to try and progress my understanding of how most websites and etc would use session tokens to authenticate a user and attempted to implement a slightly simplified version using the sessionStorage.getItem and sessionStorage.getItem functions. Unfortunatley for me this lead to a miread of issues and additionally I realised that the database had no implementation of uuids and only an instance of integer ids that were generated through the model that were not truely UUIDs and instead simple ints that reflected the order which users were added to the database. This meant I had to refactor the code and tests to use uuids and migrate the existing database so that all users had one. I then opted for a cookie based session token In order to securely manage permissions I implemented a session-token system using express-session to ensure only authenticated users had access to funtions that they were meant to. I decided on this approach as opposed to JWT due to its ability to invalidate sessions on logout, security of session token storage and ease of use. Each session token is stored
 
 #### Protecting against SQL injection attacks - **Isabella Sulisufi**
 
@@ -105,7 +105,7 @@ Our tests are structured to validate the application's behavior, as seen in the 
 
 ```javascript
 describe("GET /", () => {
-  it("should ..test scenario", async () => {});
+	it("should ..test scenario", async () => {});
 });
 ```
 
@@ -160,9 +160,9 @@ For example, the validation checks that:
 
 ```javascript
 if (!validator.isEmail(email)) {
-  return res
-    .status(400)
-    .json({ success: false, message: "Invalid email format." });
+	return res
+		.status(400)
+		.json({ success: false, message: "Invalid email format." });
 }
 ```
 
@@ -170,17 +170,17 @@ If an attacker tries to input something like `DROP TABLE users;`, this won't pas
 
 ```javascript
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "supersecretkey", // Replace with a strong, environment-based secret
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true, // Prevents XSS attacks
-      secure: process.env.NODE_ENV === "production", // Only send cookies over HTTPS in production
-      sameSite: "Strict", // Prevents CSRF attacks
-      maxAge: 24 * 60 * 60 * 1000, // 1-day expiration
-    },
-  })
+	session({
+		secret: process.env.SESSION_SECRET || "supersecretkey", // Replace with a strong, environment-based secret
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			httpOnly: true, // Prevents XSS attacks
+			secure: process.env.NODE_ENV === "production", // Only send cookies over HTTPS in production
+			sameSite: "Strict", // Prevents CSRF attacks
+			maxAge: 24 * 60 * 60 * 1000, // 1-day expiration
+		},
+	})
 );
 ```
 
@@ -207,8 +207,8 @@ For example, when checking if an email is already registered, we only need the i
 
 ```javascript
 const existingUser = await User.findOne({
-  where: { email },
-  attributes: ["id"],
+	where: { email },
+	attributes: ["id"],
 });
 ```
 
