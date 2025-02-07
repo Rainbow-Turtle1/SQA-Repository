@@ -38,12 +38,12 @@
 
 ## Team Contributions
 
-| Team Member       |                    Responsibility                    |
-| ----------------- | :--------------------------------------------------: |
-| Nathan Voong      | Blog Post Management (searching and filtering posts) |
-| Asher De Souza    |   User Profile (editing and deleting user details)   |
-| Arran McPherson   |           Adding UUIDs and session tokens            |
-| Isabella Sulisufi |      User Authentication (registration & login)      |
+| Team Member       |                    Responsibility                    | Percentage |
+| ----------------- | :--------------------------------------------------: | ---------- |
+| Nathan Voong      | Blog Post Management (searching and filtering posts) | 25%        |
+| Asher De Souza    |   User Profile (editing and deleting user details)   | 25%        |
+| Arran McPherson   |           Adding UUIDs and session tokens            | 25%        |
+| Isabella Sulisufi |      User Authentication (registration & login)      | 25%        |
 
 ## Setup Instructions
 
@@ -69,26 +69,25 @@ We also added a user profile pages where users can change their profile picture,
 
 ## Challenges & Solutions
 
+#### Session Tokens - **Arran McPherson**
+
 One of the challenges that we faced was the implementation of session tokens. [talk about the problem and what you did to fix it]
+
+#### Protecting against SQL injection attacks - **Isabella Sulisufi**
+
+A challenge I faced was preventing SQL injection attacks, as I had no prior experience with them. I had to research how SQL injection works and adapt solutions I found online, as most examples used technologies different from Sequelize. To overcome this, I explored Sequelize’s built-in query protection features and used different methods to sanitise user inputs, such as a validator library and also trimmed inputs to remove empty space.
+
+#### Working with the Pug template engine - **Nathan Voong**
+
+A challenge I faced was working with a new language, PUG, and knowing what I wanted to do but struggling to implement it. To overcome this I had to research every step of the way of implementing my feature like how to create search queries, pass variables from the backend into the PUG file, and mostly checking the syntax necessary for my logic to work.
+
+#### - **Asher De Souza**
 
 ## Evidence for Marking Criteria
 
-- explain how each thing in the marking criteria was addressed
-- Reference relevant sections of the codebase or configuration
-  files.
-- Provide additional evidence (e.g., videos, screenshots, or links)
-  as required.
-
 ## Feature Implementation
 
-video goes here
-code examples of:
-
-- registering a user & then logging in seperately to show both functionality
-- searching/sorting posts
-- editing and deleting posts, also show how you can't edit posts that aren't yours
-- editing a user's profile (change password, edit details, delete account, profile picture)
-- **It says to reference key sections of the codebase, I can add those to be side-by-side in the video**
+video goes here, need to show code examples in the video
 
 ## Testing
 
@@ -116,6 +115,8 @@ Attached is the test coverage report
 ### How edge cases and error conditions were tested
 
 The primary way in which edge cases were identified was through carefully thinking about how potential users of the app would use it. Across the website, there are places where input forms are used - users could potentially enter nothing into the input fields and potentially risk sending bad requests to modify the database. To reduce the risk of this, we modified the input field component to not accept blank inputs and force the user to input text before submitting the form.
+
+In the test files, the first few assertions were those to test the 'happy path' of the app, by checking that if a user entered a correct input, they would get the expected response. Other assertions checked that if a user was to enter incorrect information (such as the wrong email or password), then they would receive an error message.
 
 ![alt text](/public/resources/readme-assets/forms.png)
 
@@ -280,7 +281,7 @@ Example of PRs with descriptive descriptions or videos
 Example of comments being left asking for a screenshot of change
 ![Example branch naming convention](/public/resources/readme-assets/leaving-comments.png)
 
-### How we colllaborated
+### How we collaborated
 
 #### Standups
 
