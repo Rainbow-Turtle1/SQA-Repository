@@ -19,13 +19,11 @@ router.post("/register", async (req, res) => {
   try {
     let { name, email, password, confirmPassword } = req.body;
 
-    // Trim input values
     name = name.trim();
     email = email.trim();
     password = password.trim();
     confirmPassword = confirmPassword.trim();
 
-    // Validate inputs
     if (
       validator.isEmpty(name) ||
       validator.isEmpty(email) ||
@@ -58,7 +56,6 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({
       where: { email },
       attributes: ["id"],
@@ -99,11 +96,9 @@ router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
 
-    // Trim input values
     email = email.trim();
     password = password.trim();
 
-    // Validate inputs
     if (validator.isEmpty(email) || validator.isEmpty(password)) {
       return res.status(400).json({
         success: false,
@@ -118,7 +113,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Find user
     const user = await User.findOne({
       where: { email },
       attributes: ["id", "password"],
@@ -132,7 +126,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Check password
     const doesPasswordMatch = await bcrypt.compare(password, user.password);
 
     if (!doesPasswordMatch) {

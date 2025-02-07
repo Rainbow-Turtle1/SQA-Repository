@@ -53,10 +53,10 @@ test("tokenIsValid should return false for an expired token and call session.des
   const req = MockReq();
   req.session.user = {
     id: "uuid-123",
-    date: "20000101", // Simulated expired token date
+    date: "20000101", 
   };
   expect(tokenIsValid(req)).toBe(false);
-  expect(req.session.destroy).toHaveBeenCalled(); // ✅ Ensures destroy() was called
+  expect(req.session.destroy).toHaveBeenCalled();
 });
 
 test("tokenIsValid should return false if no user session exists", () => {
