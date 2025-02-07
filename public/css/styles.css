@@ -104,6 +104,76 @@ button.danger:hover {
   flex-direction: column;
   gap: 10px;
 }
+.image-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  border-style: solid;
+  border-width: 10px;
+  border-color: black;
+  border-radius: 50%;
+}
+
+.profile-picture-container,
+.profile-picture-container:hover {
+  background: white;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-items: center;
+  z-index: 1;
+}
+
+.profile-picture-container > * {
+  grid-column: 1 / 1;
+  grid-row: 1 / 1;
+}
+
+.save-icon {
+  z-index: 2;
+  position: relative;
+  left: 75px;
+  top: 75px;
+  border: #000000;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 25px;
+  background-color: #aaaaaa;
+  font-size: 20px;
+}
+
+.details-container {
+  margin: 0;
+  padding-bottom: 20px;
+}
+
+.details {
+  font-size: 16px;
+}
+
+.change-credentials {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.change-credentials-buttons {
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.delete-account {
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
 
 .profile-icon {
   width: 40px;
