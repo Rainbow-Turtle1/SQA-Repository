@@ -26,13 +26,17 @@ describe("GET /", () => {
   it("should return the home page", async () => {
     const response = await request(app).get("/");
 
+    // Check for the main page elements
     expect(response.text).toContain("Blog with Express");
     expect(response.text).toContain("+ Create Post");
     expect(response.text).toContain("Post Stats");
-    expect(response.text).toContain("Login");
-    expect(response.text).toContain("Register");
+
+    // Check if login and register buttons exist for non-logged-in users
     expect(response.text).toContain(
-      '<img class="profile-icon" src="resources/profile-images/grey-profile-icon.png" alt="Profile Picture">'
+      '<a class="login-button light-blue-button" href="/login">Login</a>'
+    );
+    expect(response.text).toContain(
+      '<a class="register-button light-blue-button" href="/register">Register</a>'
     );
   });
   it("should return the 404 page", async () => {
@@ -398,14 +402,15 @@ describe("GET /stats when no posts are available", () => {
 
   it("should return 0 for all stats when there are no posts", async () => {
     const response = await request(app).get("/stats");
-    
+
     // Check the response for the correct default values
     expect(response.status).toBe(200);
     expect(response.text).toContain("Average: 0.00 characters");
     expect(response.text).toContain("Median: 0.00 characters");
     expect(response.text).toContain("Maximum: 0.00 characters");
     expect(response.text).toContain("Minimum: 0.00 characters");
-    expect(response.text).toContain("Total length of all posts: 0.00 characters");
+    expect(response.text).toContain(
+      "Total length of all posts: 0.00 characters"
+    );
   });
 });
-
