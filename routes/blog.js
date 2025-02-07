@@ -5,6 +5,7 @@ import { Op, Sequelize } from "sequelize";
 import {
   getAccountProfilePicture,
   profilePicturePaths,
+  getCurrentLoggedInUser,
 } from "./shared-data.js";
 import { tokenIsValid, FetchSessionId } from "./session-tokens.js";
 
@@ -42,6 +43,7 @@ router.get("/", async (req, res) => {
   const posts = await BlogPost.findAll({ where: query, order: sortOption });
 
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   res.render("blog-posts/index", {
     title: "Blog Posts",
     posts,
@@ -49,14 +51,17 @@ router.get("/", async (req, res) => {
     sort,
     noPostsFound: posts.length === 0,
     profileIcon: profilePicturePaths[accountProfilePicture],
+    user,
   });
 });
 
 router.get("/create", (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   res.render("blog-posts/create", {
     title: "Create Post",
     profileIcon: profilePicturePaths[accountProfilePicture],
+    user,
   });
 });
 
@@ -109,14 +114,14 @@ router.get("/post/:id", async (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
   if (post) {
     const currentUserId = FetchSessionId(req);
-    const postAuthor = post.signature;
+    const postSignature = post.signature;
 
-    console.log("post: " + postAuthor);
+    console.log("post: " + postSignature);
     console.log("current: " + currentUserId);
     res.render("blog-posts/post", {
       title: post.title,
       post,
-      edit: postAuthor === currentUserId,
+      edit: postSignature === currentUserId,
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
   } else {
@@ -132,9 +137,9 @@ router.get("/edit/:id", async (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
   if (post) {
     const currentUserId = FetchSessionId(req);
-    const postAuthor = post.signature;
+    const postSignature = post.signature;
 
-    if (postAuthor !== currentUserId) {
+    if (postSignature !== currentUserId) {
       return res
         .status(403)
         .send("Forbidden: you can only edit your own posts");
@@ -171,6 +176,7 @@ router.post("/delete/:id", async (req, res) => {
 
 router.get("/stats", async (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   const posts = await BlogPost.findAll();
   const lengths = posts.map((post) => post.title.length + post.content.length);
   const stats = {
@@ -186,6 +192,7 @@ router.get("/stats", async (req, res) => {
     title: "Post Statistics",
     ...stats,
     profileIcon: profilePicturePaths[accountProfilePicture],
+    user,
   });
 });
 

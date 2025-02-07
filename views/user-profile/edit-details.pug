@@ -3,7 +3,7 @@ extends layout
 block content
     p Amend your name and email below.
     p Note: You cannot change your email address to one that is already in use.
-    p Currently, your name is #{user.user.name} and your email is #{user.user.email}.
+    p Currently, your name is <strong>#{user.name}</strong> and your email is <strong>#{user.email}</strong>.
     form#editProfileForm(action='/profile/edit', method='POST')
         .form-group
             label(for='name') Name:

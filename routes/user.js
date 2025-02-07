@@ -3,6 +3,10 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/user.js";
 import validator from "validator";
 import { NewSessionToken } from "./session-tokens.js";
+import {
+  setCurrentLoggedInUser,
+  getCurrentLoggedInUser,
+} from "./shared-data.js";
 
 const router = Router();
 
@@ -138,6 +142,9 @@ router.post("/login", async (req, res) => {
       });
     }
     NewSessionToken(req, user.id); // create and store session token
+    const successfulUser = await User.findOne({ where: { email } });
+    setCurrentLoggedInUser({ ...successfulUser.dataValues });
+    console.log("User logged in:", getCurrentLoggedInUser());
 
     return res.status(200).json({
       success: true,

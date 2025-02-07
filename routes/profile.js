@@ -6,46 +6,46 @@ import {
   getAccountProfilePicture,
   setAccountProfilePicture,
   profilePicturePaths,
+  getCurrentLoggedInUser,
+  setCurrentLoggedInUser,
 } from "./shared-data.js";
 
 let accountProfilePicture = getAccountProfilePicture();
 let currentProfilePicture = 0;
 
-const user = {
-  name: "John Smith",
-  email: "test@email.com",
-  password: "password123",
-};
-
 router.get("/profile", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/profile", {
     title: "Profile",
-    user: { user },
+    user: user,
     profilePicture: profilePicturePaths[accountProfilePicture],
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
 router.get("/profile/edit", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/edit-details", {
     title: "Edit Profile",
-    user: { user },
+    user: user,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
 router.get("/profile/change-password", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/change-password", {
     title: "Change Password",
-    user: { user },
+    user: user,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
 
 router.get("/profile/delete-account", (req, res) => {
+  const user = getCurrentLoggedInUser();
   res.render("user-profile/delete-account", {
     title: "Delete Account",
-    user: { user },
+    user: user,
     profileIcon: profilePicturePaths[accountProfilePicture],
   });
 });
@@ -53,8 +53,10 @@ router.get("/profile/delete-account", (req, res) => {
 router.post("/profile/change-password", async (req, res) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
-    const email = "test@email.com";
-    const user = await User.findOne({ where: { email } });
+    const currentLoggedInUser = getCurrentLoggedInUser();
+    const user = await User.findOne({
+      where: { email: currentLoggedInUser.email },
+    });
 
     if (!oldPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({
@@ -94,7 +96,10 @@ router.post("/profile/change-password", async (req, res) => {
     }
 
     const newHash = await bcrypt.hash(newPassword, 10);
-    await User.update({ password: newHash }, { where: { email } });
+    await User.update(
+      { password: newHash },
+      { where: { email: currentLoggedInUser.email } }
+    );
 
     res.status(200).json({
       success: true,
@@ -102,7 +107,7 @@ router.post("/profile/change-password", async (req, res) => {
       redirectUrl: "/profile",
     });
   } catch {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: "Error changing password.",
     });
@@ -112,8 +117,10 @@ router.post("/profile/change-password", async (req, res) => {
 router.post("/profile/edit", async (req, res) => {
   try {
     const { name, email } = req.body;
-    const mockUserEmail = "test@email.com"; //mocking a logged in user's email
-    const user = await User.findOne({ where: { email: mockUserEmail } }); // find the user that needs to be updated
+    const currentLoggedInUser = getCurrentLoggedInUser();
+    const user = await User.findOne({
+      where: { email: currentLoggedInUser.email },
+    });
 
     if (!name && !email) {
       return res.status(400).json({
@@ -128,10 +135,15 @@ router.post("/profile/edit", async (req, res) => {
         { name },
         {
           where: {
-            email: mockUserEmail,
+            email: currentLoggedInUser.email,
           },
         }
       );
+      setCurrentLoggedInUser({
+        ...currentLoggedInUser,
+        name,
+        email: currentLoggedInUser.email,
+      });
     } else if (email && name === "") {
       const checkAgainstDBUser = await User.findOne({ where: { email } });
       if (checkAgainstDBUser && checkAgainstDBUser.email !== user.email) {
@@ -146,7 +158,7 @@ router.post("/profile/edit", async (req, res) => {
         { email },
         {
           where: {
-            email: mockUserEmail,
+            email: currentLoggedInUser.email,
           },
         }
       );
@@ -163,10 +175,11 @@ router.post("/profile/edit", async (req, res) => {
         { name, email },
         {
           where: {
-            email: mockUserEmail,
+            email: currentLoggedInUser.email,
           },
         }
       );
+      setCurrentLoggedInUser({ ...currentLoggedInUser, name, email });
     }
 
     return res.status(200).json({
@@ -186,8 +199,10 @@ router.post("/profile/edit", async (req, res) => {
 router.post("/profile/delete-account", async (req, res) => {
   try {
     const { password } = req.body;
-    const email = "test@email.com";
-    const user = await User.findOne({ where: { email } });
+    const currentLoggedInUser = getCurrentLoggedInUser();
+    const user = await User.findOne({
+      where: { email: currentLoggedInUser.email },
+    });
 
     if (!password) {
       return res.status(400).json({
@@ -214,7 +229,7 @@ router.post("/profile/delete-account", async (req, res) => {
       });
     }
 
-    await User.destroy({ where: { email } });
+    await User.destroy({ where: { email: currentLoggedInUser.email } });
 
     return res.status(200).json({
       success: true,
@@ -228,6 +243,7 @@ router.post("/profile/delete-account", async (req, res) => {
 
 router.post("/profile", (req, res) => {
   const { action } = req.body;
+  const user = getCurrentLoggedInUser();
 
   if (action === "nextPicture") {
     currentProfilePicture < profilePicturePaths.length - 1
@@ -236,7 +252,7 @@ router.post("/profile", (req, res) => {
 
     res.render("user-profile/profile", {
       title: "Profile",
-      user: { user },
+      user: user,
       profilePicture: profilePicturePaths[currentProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
@@ -247,7 +263,7 @@ router.post("/profile", (req, res) => {
 
     res.render("user-profile/profile", {
       title: "Profile",
-      user: { user },
+      user: user,
       profilePicture: profilePicturePaths[currentProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
@@ -257,7 +273,7 @@ router.post("/profile", (req, res) => {
 
     res.render("user-profile/profile", {
       title: "Profile",
-      user: { user },
+      user: user,
       profilePicture: profilePicturePaths[accountProfilePicture],
       profileIcon: profilePicturePaths[accountProfilePicture],
     });
