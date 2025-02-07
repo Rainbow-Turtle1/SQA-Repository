@@ -91,7 +91,9 @@ Additionally, I had an issue when testing the profile page where test suites wou
 
 ## Feature Implementation
 
-video goes here, need to show code examples in the video
+Video is hosted on this link, which I have provided you access to. (07/02/2025)
+
+https://drive.google.com/file/d/1PGrVT2JBvslSTNiDoxRqsoFNKG93oIf3/view?usp=drive_link
 
 ## Testing
 
