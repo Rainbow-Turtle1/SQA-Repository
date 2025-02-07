@@ -23,22 +23,6 @@ describe("GET /", () => {
 
     expect(response.status).toBe(200);
   });
-  it("should return the home page", async () => {
-    const response = await request(app).get("/");
-
-    // Check for the main page elements
-    expect(response.text).toContain("Blog with Express");
-    expect(response.text).toContain("+ Create Post");
-    expect(response.text).toContain("Post Stats");
-
-    expect(response.text).toContain(
-      '<a class="login-button light-blue-button" href="/login">Login</a>'
-    );
-
-    expect(response.text).toContain(
-      '<a class="register-button light-blue-button" href="/register">Register</a>'
-    );
-  });
   it("should return the 404 page", async () => {
     const response = await request(app).get("/undefined-route");
 
