@@ -91,6 +91,7 @@ describe("POST /profile/edit and test edit details functionality", () => {
   });
   it("should return 400 if the user tries to change their email to one that already exists in the database", async () => {
     await User.create({
+      uuid: "123e4567-e89b-12d3-a456-426614174001",
       name: "Test Water Bottle",
       email: "testing@email.com",
       password: await bcrypt.hash("test", 10),
