@@ -1,5 +1,5 @@
 # SQA Assignment
- 
+
 - [SQA Assignment](#sqa-assignment)
   - [Team Contributions](#team-contributions)
   - [Setup Instructions](#setup-instructions)
@@ -21,16 +21,16 @@
     - [Any additional configurations or tools used](#any-additional-configurations-or-tools-used)
   - [Code Quality and Refactoring](#code-quality-and-refactoring)
     - [Sections of the code demonstrating modularisation](#sections-of-the-code-demonstrating-modularisation)
-        - [Route Definitions (routes/ Directory)](#route-definitions-routes-directory)
-        - [Middleware Functions (middleware/ Directory)](#middleware-functions-middleware-directory)
+      - [Route Definitions (routes/ Directory)](#route-definitions-routes-directory)
+      - [Middleware Functions (middleware/ Directory)](#middleware-functions-middleware-directory)
     - [Key improvements made during refactoring](#key-improvements-made-during-refactoring)
   - [CI/CD and Git Practices](#cicd-and-git-practices)
     - [GitHub Actions Used](#github-actions-used)
       - [Linting Code](#linting-code)
       - [Testing](#testing-1)
     - [Git Practices](#git-practices)
-        - [Use feature branches for each functionality.](#use-feature-branches-for-each-functionality)
-        - [Commit regularly with clear, descriptive messages.](#commit-regularly-with-clear-descriptive-messages)
+      - [Use feature branches for each functionality.](#use-feature-branches-for-each-functionality)
+      - [Commit regularly with clear, descriptive messages.](#commit-regularly-with-clear-descriptive-messages)
     - [How we colllaborated](#how-we-colllaborated)
       - [Standups](#standups)
       - [PRs](#prs)
@@ -68,6 +68,7 @@ We also added the ability for people to register or log in to an account which i
 We also added a user profile pages where users can change their profile picture, edit their name or email, change their password and even permanently delete their account.
 
 ## Challenges & Solutions
+
 One of the challenges that we faced was the implementation of session tokens. [talk about the problem and what you did to fix it]
 
 ## Evidence for Marking Criteria
@@ -107,11 +108,10 @@ describe("GET /", () => {
 
 With this format, we validate both the HTTP response status and the presence of key elements on the page, ensuring that the user experience aligns with our expectations. By using BDD, we were able to remain adaptable while still maintaining confidence in our application's functionality.
 
-
 ### Evidence of achieving the coverage report
 
-Attached is the test coverage report **(NEEDS TO BE UPDATED)**
-
+Attached is the test coverage report
+![alt text](image.png)
 ![alt text](/public/resources/readme-assets/test-coverage.png)
 
 ### How edge cases and error conditions were tested
@@ -123,6 +123,7 @@ The primary way in which edge cases were identified was through carefully thinki
 ## Security Enhancements
 
 ### Password Hashing
+
 We decided not to encrypt passwords as it relies on an encryption key to decrypt the data back into its original form. Even if we store this key securely in environment variables, there's still a risk: if someone gains access to the key, they could decrypt and expose all stored passwords.
 
 We decided to hash the passwords using [bcrypt](https://www.npmjs.com/package/bcryptjs). Hashing is a one-way operation, meaning once a password is hashed, it cannot be reversed back to its original form.
@@ -146,8 +147,8 @@ Example picture of database where password entered was 123 and it shows the hash
 
 By using hashing with salting, we've significantly enhanced our password security. Users’ credentials are better protected against common attacks like rainbow table lookups and hash collisions, ensuring that their sensitive information remains confidential even in the event of a database breach.
 
-
 ### Input Validation
+
 **Input Sanitisation**
 We sanitise inputs by using the [validator library](https://www.npmjs.com/package/validator) to ensure that the inputs are well-formed. For example, we check if the email follows a valid format and if passwords are long enough. This ensures that malicious or unexpected input, such as special characters that might be used for injection (e.g., `--` `;` ` ` ), doesn't get submitted in the first place.
 
@@ -155,7 +156,9 @@ For example, the validation checks that:
 
 ```javascript
 if (!validator.isEmail(email)) {
-  return res.status(400).json({ success: false, message: "Invalid email format." });
+  return res
+    .status(400)
+    .json({ success: false, message: "Invalid email format." });
 }
 ```
 
@@ -178,13 +181,15 @@ app.use(
 ```
 
 ### CSRF Protection
-CSRF attacks trick users into making unwanted requests on a web application where they are authenticated. Our blog app mitigates this by setting `sameSite: "Strict"` in session cookies, ensuring that cookies are not sent with cross-site requests, which blocks unauthorized actions initiated from other domains. 
+
+CSRF attacks trick users into making unwanted requests on a web application where they are authenticated. Our blog app mitigates this by setting `sameSite: "Strict"` in session cookies, ensuring that cookies are not sent with cross-site requests, which blocks unauthorized actions initiated from other domains.
 
 ### Safeguards against XSS
+
 XSS attacks occur when malicious scripts are injected into web pages viewed by users. In our blog application, the middleware `httpOnly: true` setting helps mitigate XSS risks by preventing JavaScript from accessing the session cookie, making it harder for attackers to steal authentication tokens.
 
-
 ### Safeguards against SQL injection
+
 While Sequelize's ORM handles SQL injection prevention automatically, we further strengthened the app's security through different methods.
 
 **Trim Input Values**
@@ -199,7 +204,7 @@ For example, when checking if an email is already registered, we only need the i
 ```javascript
 const existingUser = await User.findOne({
   where: { email },
-  attributes: ["id"], 
+  attributes: ["id"],
 });
 ```
 
@@ -212,37 +217,38 @@ Restricting the data selected prevents unnecessary exposure of sensitive informa
 ## Code Quality and Refactoring
 
 ### Sections of the code demonstrating modularisation
+
 ##### Route Definitions (routes/ Directory)
+
 `routes/file.js`
-We separated all of the routes into their own module which helped us achieve a clear separation of concerns, enhancing maintainability. For example, blog, profile, user and session tokens all have their own file. 
+We separated all of the routes into their own module which helped us achieve a clear separation of concerns, enhancing maintainability. For example, blog, profile, user and session tokens all have their own file.
 
 ##### Middleware Functions (middleware/ Directory)
-`middleware/auth.js`
-This middleware handles user authentication checks, ensuring that only authorised users can access certain routes. Isolating authentication logic in a dedicated module helped us make it  reusable and keeps the main application code clean.
 
+`middleware/auth.js`
+This middleware handles user authentication checks, ensuring that only authorised users can access certain routes. Isolating authentication logic in a dedicated module helped us make it reusable and keeps the main application code clean.
 
 ### Key improvements made during refactoring
+
 For the Profile page, initially all of the test suites were held within one file, although separated by distinct describe blocks. However, it was getting difficult to work on the file because of the amount of unrelated tests. As a solution, we decided to split up the tests into their individual functionalities (edit details, delete account etc.)
 
 ![alt text](/public/resources/readme-assets/profile-tests.png)
 
 This made the tests much easier to work with, because there was a 'separation of concerns' between the various test files.
 
-
 We also refactored the views folder containing the `.pug` files, because as we added new page views, it became more difficult to find a particular file. Each `.pug` file is now categorised into being under either **blog-posts** or **user-profile**, this made it a lot easier for us to find the file that we were looking for while developing.
 ![alt text](/public/resources/readme-assets/pug-folder.png)
-
-
-
 
 ## CI/CD and Git Practices
 
 ### GitHub Actions Used
+
 After a pull request had been made, we added a couple of GitHub actions to our repository for both linting and testing our code.
 
 ![alt text](/public/resources/readme-assets/pr-checks.png)
 
 #### Linting Code
+
 [Linting file](https://github.com/Rainbow-Turtle1/SQA-Repository/blob/main/.github/workflows/lint.yml)
 To maintain consistent code standards and ensure our codebase remains clean and tidy, we implemented a GitHub Action specifically for linting. For this, we used ESLint along with a custom configuration file tailored to our project requirements.
 
@@ -250,18 +256,21 @@ The linting action is triggered automatically on both pull requests and direct p
 We opted for ESLint due to its flexibility and wide adoption within the JavaScript ecosystem.
 
 #### Testing
+
 [Testing file](https://github.com/Rainbow-Turtle1/SQA-Repository/blob/main/.github/workflows/node.js.yml)
 We streamlined the CI process by automating functionality tests. This workflow triggers whenever changes are pushed or when pull requests are created. This provides rapid feedback on code changes, allowing us to catch errors early and fix them before they reach production. This in turn reduces manual effort and human error, as every change is thoroughly tested without requiring developer intervention. It also ensures consistent testing environments and accelerates the development workflow by integrating caching mechanisms for dependencies to improve efficiency.
 
-
 ### Git Practices
+
 ##### Use feature branches for each functionality.
+
 We followed a structured branch naming convention using the format `type/task-name`, where type could be `feat` (feature), `fix` (bug fix), or `chore` (maintenance tasks). This approach closely mirrored ClearScore practices, making it both familiar and easy to adopt. By maintaining consistency in our branch names, we improved clarity, streamlined collaboration, and made it easier to track the purpose of each branch within the project.
 
 ![Example branch naming convention](/public/resources/readme-assets/branch-names.jpeg)
 
 ##### Commit regularly with clear, descriptive messages.
-Our commits were consistently spaced out and made on a regular basis. Each team member worked at their own pace, and at times, other commitments such as squad work, holidays, or personal circumstances affected contribution frequency. However, overall, everyone actively participated and maintained a steady flow of commits.  
+
+Our commits were consistently spaced out and made on a regular basis. Each team member worked at their own pace, and at times, other commitments such as squad work, holidays, or personal circumstances affected contribution frequency. However, overall, everyone actively participated and maintained a steady flow of commits.
 
 To ensure clarity, we added descriptive messages to our commits and left comments when necessary, especially in cases where there were no accompanying videos or evidence of changes. This practice helped us track modifications effectively and provided useful context for the entire team.
 
@@ -269,16 +278,17 @@ Example of PRs with descriptive descriptions or videos
 ![Example branch naming convention](/public/resources/readme-assets/descriptive-pr-1.png)
 ![Example branch naming convention](/public/resources/readme-assets/descriptive-pr-2.png)
 
-
 Example of comments being left asking for a screenshot of change
 ![Example branch naming convention](/public/resources/readme-assets/leaving-comments.png)
 
-
 ### How we colllaborated
+
 #### Standups
+
 We held standup meetings every Monday and Wednesday to discuss our current tasks, identify areas needing support, and address any challenges. These meetings were highly valuable, as they kept everyone informed about each other's progress and allowed us to reassess and adjust our plans as needed.
 
 #### PRs
+
 To collaborate on the code that we individually worked on, we used PRs (pull requests) as a means to verify each other's code before it had been merged into the main branch. This process would start once somebody had pushed changes to their branch such that they had added implementation and the necessary tests. Once they had created a pull request on GitHub and added a relevant description to their PR, they would share this PR with the rest of the team via Slack, which is the primary messaging tool that we use at work.
 
 We made sure to leave comments on pull requests, even when everything looked good. Additionally, we discussed PRs in person or on Slack, facilitating offline conversations to ensure clarity and alignment.
@@ -287,8 +297,8 @@ After the PR had completed the necessary checks, the person who made the PR woul
 
 ![alt text](/public/resources/readme-assets/git-rebase-and-merge.png)
 
-
 #### Collaborative PRs
+
 There were also instances where team members collaborated on a pull request, working together to refine the code, troubleshoot issues, and ensure the best possible implementation. This collaborative approach helped improve code quality and knowledge sharing within the team.
 
 [PR where Asher helped Arran fix some failing test](https://github.com/Rainbow-Turtle1/SQA-Repository/pull/34)
