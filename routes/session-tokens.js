@@ -1,3 +1,5 @@
+import { clearLoggedInUser } from "./shared-data.js";
+
 function NewSessionToken(req, uuid) {
   if (!req.session) {
     console.error("Session object is undefined. Possible misconfiguration.");
@@ -17,6 +19,32 @@ function NewSessionToken(req, uuid) {
   console.log(
     `Session token was created for user: ${uuid} with date: ${getCurrentDate()}`
   );
+}
+
+function ClearSessionToken(req) {
+  if (!req.session) {
+    console.log(
+      "Session object is undefined. Possible misconfiguration. Session may already be clear."
+    );
+    return;
+  }
+
+  req.session.user = {
+    id: null,
+    date: null,
+  };
+  clearLoggedInUser();
+
+  console.log("Cleared session token success.");
+
+  //  DEstroy the session
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+    } else {
+      console.log("Session fully destroyed.");
+    }
+  });
 }
 
 function FetchSessionId(req) {
@@ -62,4 +90,4 @@ function getCurrentDate() {
   return `${date.getFullYear()}${month}${day}`;
 }
 
-export { NewSessionToken, tokenIsValid, FetchSessionId };
+export { NewSessionToken, ClearSessionToken, tokenIsValid, FetchSessionId };

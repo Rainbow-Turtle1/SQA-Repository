@@ -2,7 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import { User } from "../models/user.js";
 import validator from "validator";
-import { NewSessionToken } from "./session-tokens.js";
+import { NewSessionToken, ClearSessionToken } from "./session-tokens.js";
 import {
   setCurrentLoggedInUser,
   getCurrentLoggedInUser,
@@ -151,6 +151,11 @@ router.post("/login", async (req, res) => {
       message: "An error occurred while logging in.",
     });
   }
+});
+
+router.get("/logout", (req, res) => {
+  ClearSessionToken(req); // Now this fully clears session data
+  res.redirect("/login"); // Redirect user to login page
 });
 
 export default router;
