@@ -16,16 +16,16 @@ html(lang="en")
             a.navbar-button(href="/stats") Post Stats
       .navbar-account
         if user && Object.keys(user).length > 0
-          .navbar-account-button
-            span <strong> Welcome, #{user.name}! </strong>
+          .navbar-user-info
+            span.welcome-text Welcome, #{user.name}!
+            a(href="/profile")
+              img(class="profile-icon", src=profileIcon, alt='Profile Picture')
             a.logout-button(href="/logout") Logout
         else
-          .navbar-account-button
-            a.login-button(href="/login") Login
+          .navbar-account-buttons
+            a.login-button.light-blue-button(href="/login") Login
             div /
-            a.register-button(href="/register") Register
-        a(href="/profile")
-          img(class="profile-icon", src=profileIcon, alt='Profile Picture')
+            a.register-button.light-blue-button(href="/register") Register
     main
       h1=title
       block content
