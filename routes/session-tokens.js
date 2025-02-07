@@ -24,14 +24,17 @@ function ClearSessionToken(req) {
     console.log(
       "Session object is undefined. Possible misconfiguration. Session may already be clear"
     );
-    return;
+    return res.redirect("/login");
   }
 
-  req.session.user = {
-    id: null,
-    date: null,
-  };
-  console.log("cleared session token");
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+    } else {
+      console.log("Session successfully cleared.");
+    }
+    console.log("cleared session token");
+  });
 }
 
 function FetchSessionId(req) {
