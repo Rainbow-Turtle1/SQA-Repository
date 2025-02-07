@@ -1,5 +1,3 @@
-// this file is temporary, and will be removed once we user authentication is implemented
-
 let accountProfilePicture = 0;
 
 export function getAccountProfilePicture() {
@@ -22,3 +20,13 @@ export const profilePicturePaths = [
   "resources/profile-images/pink-profile-icon.png",
   "resources/profile-images/black-profile-icon.png",
 ];
+
+let currentLoggedInUser = {};
+
+export function getCurrentLoggedInUser() {
+  return currentLoggedInUser;
+}
+
+export function setCurrentLoggedInUser(user) {
+  currentLoggedInUser = user;
+}
