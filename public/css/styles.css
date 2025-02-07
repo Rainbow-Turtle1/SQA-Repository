@@ -146,6 +146,28 @@ button.danger:hover {
   font-size: 20px;
 }
 
+.profile-icon:hover {
+  cursor: pointer;
+  -webkit-mask-image: linear-gradient(
+    -75deg,
+    rgba(236, 0, 0, 0.6) 30%,
+    #33ff00 50%,
+    rgba(43, 0, 255, 0.6) 70%
+  );
+  -webkit-mask-size: 200%;
+  animation: shine 2s infinite;
+}
+
+@-webkit-keyframes shine {
+  from {
+    -webkit-mask-position: 150%;
+  }
+
+  to {
+    -webkit-mask-position: -50%;
+  }
+}
+
 .details-container {
   margin: 0;
   padding-bottom: 20px;
@@ -176,10 +198,49 @@ button.danger:hover {
 }
 
 .profile-icon {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
+  border-style: solid;
+  border-width: 3px;
   margin-right: 10px;
+}
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.filter-dropdown {
+  padding: 5px;
+  width: 130px;
+  height: 32px;
+  border-radius: 8px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.filter-button {
+  border-radius: 8px;
+}
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.search-bar {
+  align-items: center;
+  width: 400px;
+}
+
+.horizontal {
+  display: flex;
+  gap: 10px;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
 }
 
 .profile-icon:hover {
