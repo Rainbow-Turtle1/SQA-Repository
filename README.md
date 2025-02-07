@@ -81,7 +81,11 @@ A challenge I faced was preventing SQL injection attacks, as I had no prior expe
 
 A challenge I faced was working with a new language, PUG, and knowing what I wanted to do but struggling to implement it. To overcome this I had to research every step of the way of implementing my feature like how to create search queries, pass variables from the backend into the PUG file, and mostly checking the syntax necessary for my logic to work.
 
-#### - **Asher De Souza**
+#### Adding profile settings - **Asher De Souza**
+
+One of the issues that I faced when testing my changes was that the tests were attempting to either GET or POST requests in the wrong format. The tests were initially trying to send requests as raw JSON, but since the requests all happened through a HTML form they required `.type("form")` to be added to the request. This issue was solved by asking for some help from frontend developers at my company, as some of them have had experience with using express in the past. We paired on debugging the code and the responses until we found out that the data needed to be sent as a form.
+
+Additionally, I had an issue when testing the profile page where test suites would pass inconsistently. My first debugging step was to split the large `profile.test.js` file into seperate test files for `index`, `edit-details`, `delete-account` & `change-password`, and recreate the same test user for them all. However, I was getting the same errors so I decided to look into how the jest testing library actually runs the test files. I found that by default, jest runs test suites in parallel so that overall execution is faster. I then added the flag `--runInBand` to my test file which made it so that tests ran sequentially rather than in parallel. This fixed the issue of my tests passing inconsistently, because the same user wasn't being created multiple times simultaneously.
 
 ## Evidence for Marking Criteria
 
