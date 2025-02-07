@@ -19,6 +19,21 @@ function NewSessionToken(req, uuid) {
   );
 }
 
+function ClearSessionToken(req) {
+  if (!req.session) {
+    console.log(
+      "Session object is undefined. Possible misconfiguration. Session may already be clear"
+    );
+    return;
+  }
+
+  req.session.user = {
+    id: null,
+    date: null,
+  };
+  console.log("cleared session token");
+}
+
 function FetchSessionId(req) {
   if (req.session && req.session.user && tokenIsValid(req)) {
     return req.session.user.id;
@@ -62,4 +77,4 @@ function getCurrentDate() {
   return `${date.getFullYear()}${month}${day}`;
 }
 
-export { NewSessionToken, tokenIsValid, FetchSessionId };
+export { NewSessionToken, ClearSessionToken, tokenIsValid, FetchSessionId };
