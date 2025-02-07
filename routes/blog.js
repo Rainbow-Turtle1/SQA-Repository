@@ -67,7 +67,7 @@ router.get("/create", (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    console.log("check if user is logged in"); //  console message to help debugging
+    console.log("check if user is logged in"); 
 
     if (!tokenIsValid(req)) {
       return res.status(401).json({
@@ -75,7 +75,7 @@ router.post("/create", async (req, res) => {
         message: "UNAUTHORIZED: SESSION TOKEN IS INVALID OR MISSING",
       });
     }
-    console.log("Session token was validated successfully"); // console message to help debigging
+    console.log("Session token was validated successfully"); 
     const userSignature = FetchSessionId(req);
 
     if (!userSignature) {
@@ -178,6 +178,20 @@ router.get("/stats", async (req, res) => {
   accountProfilePicture = getAccountProfilePicture();
   const user = getCurrentLoggedInUser();
   const posts = await BlogPost.findAll();
+
+  if (posts.length === 0) {
+    return res.render("blog-posts/stats", {
+      title: "Post Statistics",
+      average_length: 0,
+      median_length: 0,
+      max_length: 0,
+      min_length: 0,
+      total_length: 0,
+      profileIcon: profilePicturePaths[accountProfilePicture],
+      user,
+    });
+  }
+  
   const lengths = posts.map((post) => post.title.length + post.content.length);
   const stats = {
     average_length: lengths.reduce((a, b) => a + b, 0) / lengths.length,

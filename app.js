@@ -12,7 +12,6 @@ import userRoutes from "./routes/user.js";
 import profileRoutes from "./routes/profile.js";
 import favicon from "serve-favicon";
 import session from "express-session";
-//import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
