@@ -67,7 +67,7 @@ router.get("/create", (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    console.log("check if user is logged in"); 
+    console.log("check if user is logged in");
 
     if (!tokenIsValid(req)) {
       return res.status(401).json({
@@ -75,7 +75,7 @@ router.post("/create", async (req, res) => {
         message: "UNAUTHORIZED: SESSION TOKEN IS INVALID OR MISSING",
       });
     }
-    console.log("Session token was validated successfully"); 
+    console.log("Session token was validated successfully");
     const userSignature = FetchSessionId(req);
 
     if (!userSignature) {
@@ -112,6 +112,7 @@ router.get("/post/:id", async (req, res) => {
   }
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   if (post) {
     const currentUserId = FetchSessionId(req);
     const postSignature = post.signature;
@@ -123,6 +124,7 @@ router.get("/post/:id", async (req, res) => {
       post,
       edit: postSignature === currentUserId,
       profileIcon: profilePicturePaths[accountProfilePicture],
+      user,
     });
   } else {
     res.status(404).send("Post not found");
@@ -135,6 +137,7 @@ router.get("/edit/:id", async (req, res) => {
   }
   const post = await BlogPost.findByPk(req.params.id);
   accountProfilePicture = getAccountProfilePicture();
+  const user = getCurrentLoggedInUser();
   if (post) {
     const currentUserId = FetchSessionId(req);
     const postSignature = post.signature;
@@ -148,6 +151,7 @@ router.get("/edit/:id", async (req, res) => {
       title: "Edit Post",
       post,
       profileIcon: profilePicturePaths[accountProfilePicture],
+      user,
     });
   } else {
     res.status(404).send("Post not found");
@@ -191,7 +195,7 @@ router.get("/stats", async (req, res) => {
       user,
     });
   }
-  
+
   const lengths = posts.map((post) => post.title.length + post.content.length);
   const stats = {
     average_length: lengths.reduce((a, b) => a + b, 0) / lengths.length,
